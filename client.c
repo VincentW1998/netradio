@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include "h_files/manager.h"
 
-int connexion(int port) {
+int connexion(int port, int nbOption, char ** argLine) {
     struct sockaddr_in adress_sock;
     memset(&adress_sock, 0, sizeof(struct sockaddr_in));
     adress_sock.sin_family = AF_INET;
@@ -40,21 +40,21 @@ int connexion(int port) {
     int r = connect(descr, (struct sockaddr *) &adress_sock, sizeof(struct sockaddr_in));
 
     if (r != -1) {
-        char *pseudo= "WEIVincent";
-        send(descr, pseudo, strlen(pseudo), 0);
+        // char *pseudo= "WEIVincent";
+        // send(descr, pseudo, strlen(pseudo), 0);
         char buff[100];
         int size_rec = recv(descr, buff, 99*sizeof(char), 0);
         buff[size_rec] = '\0';
         printf("%s", buff);
-        for(int i = 0; i < 5; i++) {
-            char * request = "PUT Ceci est un message qui fait bientot quatre-vingt caracteres, on y est 80 pile.";
-            send(descr, request, strlen(request), 0);
-            sleep(2);
-            memset(buff, 0, strlen(buff));
-            size_rec = recv(descr, buff, 99*sizeof(char), 0);
-            buff[size_rec] = '\0';
-            printf("%s\n", buff);
-        }
+        // for(int i = 0; i < 5; i++) {
+        //     char * request = "PUT Ceci est un message qui fait bientot quatre-vingt caracteres, on y est 80 pile.";
+        //     send(descr, request, strlen(request), 0);
+        //     sleep(2);
+        //     memset(buff, 0, strlen(buff));
+        //     size_rec = recv(descr, buff, 99*sizeof(char), 0);
+        //     buff[size_rec] = '\0';
+        //     printf("%s\n", buff);
+        // }
 
 
         close(descr);
@@ -74,6 +74,27 @@ int main(int argc, char ** argv) {
     }
     char * id = completeHashtag(argv[1]);
     printf("identifiant : %s\n", id);
+    int n;
+    char line[BUFFSIZE];
+    int nbArgLine;
+    char * argLine[3]; // argument of line
+    memset(argLine, '\0', 3 * sizeof(argLine[0]));
+
+    while(1) {
+        printPrompt();
+        nbArgLine = 0;
+        memset(line, '\0', sizeof(buff));
+        if((n = read(0, line, BUFFSIZE) > 0)) {
+            if(!strcmp(line, "quit\n")) {
+                break;
+            }
+
+            nbOption = sliceLine(line, argLine);
+            memset(line, '\0', BUFFSIZE);
+        }
+        
+
+    }
     return 0;
 }
 
