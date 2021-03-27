@@ -15,6 +15,11 @@ Les gestionnaires auront chacun une liste de diffuseurs (avec leurs caractérist
 Les clients devront être capable d’écouter les messages des diffuseurs, de leur envoyer des messages par- ticuliers, de leur demander une liste des derniers messages et d’interroger les gestionnaires pour récupérer des informations sur les diffuseurs.
 
 
+Diagramme du projet
+----------------------
+![](diagram.png)
+
+
 Tester son mini-projet
 ----------------------
 
