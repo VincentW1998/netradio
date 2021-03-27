@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <netinet/in.h>
+#include "h_files/manager.h"
 
 int connexion(int port) {
     struct sockaddr_in adress_sock;
@@ -61,24 +62,14 @@ int connexion(int port) {
     return 0;
 }
 
-// Complete id by "#" if the lenght is inferior than 8
-char * completeHashtag(char * id) {
-    char * tmp = malloc(sizeof(char) * 8);
-    int len = strlen(id);
-    int completeLen = 8 - len;
-
-    if (completeLen > 0) {
-        strcat(tmp, id);
-        for (int i = 0; i < completeLen; i++) {
-            strcat(tmp, "#");
-        }
-    }
-    return tmp;
-}
 
 int main(int argc, char ** argv) {
     if (argc!=2) {
-        printf("need an identifiant (length 8 max)");
+        printf("need an identifiant (length 8 max)\n");
+        return 0;
+    }
+    if (strlen(argv[1]) > 8) {
+        printf("max length of id is 8, please choose a shorter id\n");
         return 0;
     }
     char * id = completeHashtag(argv[1]);
