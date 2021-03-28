@@ -67,11 +67,11 @@ public class Service_Gestionnaire implements Runnable{
                     Thread.sleep(10000);
                     pw.print("RUOK");
                     pw.flush();
-                    mess = br.readLine();
-                    // while((mess = br.readLine()) == null);
+                    // mess = br.readLine();
+                    while((mess = br.readLine()) == null);
                     if(mess == null || !mess.equals("IMOK"))
                         return;
-                        // Thread.sleep(5000);
+                        Thread.sleep(5000);
                 }
                 catch (InterruptedException ie){
                     //ignore
