@@ -8,14 +8,14 @@
 #include <netinet/in.h>
 #include "h_files/manager.h"
 
-int connexion(int port, char * request) {
+int connexion(int port, char * request, char * ip) {
     struct sockaddr_in adress_sock;
     memset(&adress_sock, 0, sizeof(struct sockaddr_in));
     adress_sock.sin_family = AF_INET;
     adress_sock.sin_port = htons(port);
 
     struct addrinfo * first_info;
-    int v = getaddrinfo("localhost", NULL, NULL, &first_info);
+    int v = getaddrinfo(ip, NULL, NULL, &first_info);
     if (v != 0) {
         printf("Erreur avec addrinfo\n");
         exit(-1);
@@ -77,6 +77,7 @@ int main(int argc, char ** argv) {
     memset(argLine, '\0', 3 * sizeof(argLine[0]));
     char newString[BUFFSIZE]; 
     int port;
+    char ip[16];
 
     while(1) {
         printPrompt();
@@ -94,13 +95,15 @@ int main(int argc, char ** argv) {
                 memset(line, '\0', sizeof(char) * strlen(line));
                 port = askPort();
                 typeLAST(newString);
-                connexion(port, newString);
+                askIp(ip);
+                connexion(port, newString, ip);
             }
 
             if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * strlen(line));
                 port = askPort();
-                connexion(port, "LIST\n");
+                askIp(ip);
+                connexion(port, "LIST\n", ip);
 
             }
 

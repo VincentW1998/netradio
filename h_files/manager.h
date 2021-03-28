@@ -23,6 +23,8 @@ int printError(char * mess);
 
 int askPort();
 
+int askIp(char * ip);
+
 int recvLAST(int descr);
 
 int recvLIST(int descr);

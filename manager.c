@@ -78,6 +78,15 @@ int askPort() {
     return p; 
 }
 
+/* ask ip adress */
+int askIp(char * ip) {
+    char * m = "ip adress : ";
+    write(1, m, strlen(m));
+    int n = read(0, ip, BUFFSIZE);
+    ip[n - 1] = '\0';
+    return 0;
+}
+
 /* print error message */
 int printError(char * mess) {
     write(2, mess, strlen(mess));
@@ -102,8 +111,8 @@ int recvLIST(int descr) {
     char buff[100];
     int size_rec;
     size_rec = recv(descr, buff, 99 * sizeof(char), 0);
-    printf("%s\n", buff);
     buff[size_rec] = '\0';
+    printf("%s\n", buff);
     char str_num_diff[3];
     memcpy(str_num_diff, &buff[5], 2);
     str_num_diff[2] = '\0';
@@ -116,3 +125,4 @@ int recvLIST(int descr) {
     }
     return 0;
 }
+
