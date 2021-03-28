@@ -25,7 +25,7 @@ public class Service_Gestionnaire implements Runnable{
         try{
             if(mess.length != 6 || mess[1].length() != 8 || mess[2].length() != 15 || mess[3].length() != 4 || mess[4].length() != 15 || mess[5].length() != 4)
                 return false;
-        
+      
             InetAddress.getByName(mess [2]); // will return an UnkwonHostException if the ip is invalid
             InetAddress.getByName(mess [4]);
             int port1 = Integer.parseInt(mess[3]);
@@ -35,7 +35,7 @@ public class Service_Gestionnaire implements Runnable{
         catch(UnknownHostException ue){
             return false;
         }
-    }    
+    }   
 
     public void Regi(String message) throws IOException{
         String splitRegi [] = message.split(" ");
@@ -55,8 +55,8 @@ public class Service_Gestionnaire implements Runnable{
         register.add(currDiff);
         pw.print("REOK");
         pw.flush();
-        // areUAlive();
-        // register.remove(currDiff);
+        areUAlive();
+        register.remove(currDiff);
     }
     
     public void areUAlive(){ // check if the diffuser is still active
@@ -64,14 +64,12 @@ public class Service_Gestionnaire implements Runnable{
             String mess;
             while(true){
                 try{
-                    Thread.sleep(10000);
                     pw.print("RUOK");
                     pw.flush();
-                    // mess = br.readLine();
                     while((mess = br.readLine()) == null);
                     if(mess == null || !mess.equals("IMOK"))
                         return;
-                        Thread.sleep(5000);
+                    Thread.sleep(5000);
                 }
                 catch (InterruptedException ie){
                     //ignore
@@ -93,8 +91,8 @@ public class Service_Gestionnaire implements Runnable{
                     client.close();
                     return;
                 }
-                System.out.println(mess);
                 while((mess = br.readLine()) == null);
+                System.out.println(mess);
             }
         }
         catch(Exception e){
