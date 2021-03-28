@@ -55,8 +55,8 @@ public class Service_Gestionnaire implements Runnable{
         register.add(currDiff);
         pw.print("REOK");
         pw.flush();
-        areUAlive();
-        register.remove(currDiff);
+        // areUAlive();
+        // register.remove(currDiff);
     }
     
     public void areUAlive(){ // check if the diffuser is still active
@@ -105,6 +105,7 @@ public class Service_Gestionnaire implements Runnable{
         pw.print("LINB "+ String.format("%02d", register.size())+"\n");
         pw.flush();
         for(int i = 0 ; i<register.size(); i++){
+            System.out.println(i);
             pw.print("ITEM "+register.get(i).toString()+"\n");
             pw.flush();
         }
