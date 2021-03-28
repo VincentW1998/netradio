@@ -8,11 +8,11 @@
 
 #define BUFFSIZE 512
 
-char * completeHashtag(char * id);
+char * completeHashtag(char * id, int idOrMess);
 
 int printPrompt();
 
 int typeMessage(char * type);
 
-int sliceLine(char * line, char ** argLine);
+// int sliceLine(char * line, char ** argLine);
 #endif

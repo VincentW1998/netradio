@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include "h_files/manager.h"
 
-int connexion(int port, int nbOption, char ** argLine) {
+int connexion(int port) {
     struct sockaddr_in adress_sock;
     memset(&adress_sock, 0, sizeof(struct sockaddr_in));
     adress_sock.sin_family = AF_INET;
@@ -72,7 +72,7 @@ int main(int argc, char ** argv) {
         printf("max length of id is 8, please choose a shorter id\n");
         return 0;
     }
-    char * id = completeHashtag(argv[1]);
+    char * id = completeHashtag(argv[1], 8);
     printf("identifiant : %s\n", id);
     int n;
     char line[BUFFSIZE];
@@ -83,17 +83,21 @@ int main(int argc, char ** argv) {
     while(1) {
         printPrompt();
         nbArgLine = 0;
-        memset(line, '\0', sizeof(buff));
+        memset(line, '\0', sizeof(line));
         if((n = read(0, line, BUFFSIZE) > 0)) {
             if(!strcmp(line, "quit\n")) {
                 break;
             }
 
-            nbOption = sliceLine(line, argLine);
+            // nbArgLine = sliceLine(line, argLine);
             memset(line, '\0', BUFFSIZE);
-        }
-        
 
+
+            // for (int i = 0; i < nbArgLine; i++) {
+            //     printf("%s ", argLine[i]);
+            // }
+            // printf("\n");
+        }
     }
     return 0;
 }

@@ -11,15 +11,16 @@
 //     }
 
 //     switch(idType) {
-
+//         case -1 :
+//             return -1;
 //     }
 // }
 
 // Complete id by "#" if the lenght is inferior than 8
-char * completeHashtag(char * id) {
-    char * tmp = malloc(sizeof(char) * 8);
+char * completeHashtag(char * id, int idOrMess) {
+    char * tmp = malloc(sizeof(char) * idOrMess);
     int len = strlen(id);
-    int completeLen = 8 - len;
+    int completeLen = idOrMess - len;
 
     if (completeLen > 0) {
         strcat(tmp, id);
@@ -31,35 +32,40 @@ char * completeHashtag(char * id) {
     return id;
 }
 
+
+
 int printPrompt() {
     write(1, "> ", 2);
     return 0;
 }
 
 // slice line with space delimeter
-int sliceLine(char * line, char ** argLine){
-  char * token = NULL;
-  int nbOption = 0;
-  int l = strlen(line);
+// int sliceLine(char * line, char ** argLine){
+//     char * tmp = malloc(strlen(line) + 1);
+//     strcpy(tmp, line);
 
-  while((token = strtok_r(line, " \n", &line)) != NULL) {
-    argLine[nbOption] = malloc(strlen(token) + 1);
-    if (argLine[nbOption] == NULL) {
-        printf("failed to allocated memory for argLine");
-        return -1;
-    }
+//     char * token = NULL;
+//     int nbOption = 0;
+//     //   int l = strlen(line);
 
-    strcpy(argLine[nbOption], token);
-    nbOption ++;
-  }
-  if (nbOption == 0) {
-    argLine[nbOption] = malloc(1);
-    strcpy(argLine[nbOption], "");
-    nbOption ++;
-  }
-  memset(line, '\0', l);
-  argLine[nbOption] = NULL;
-  return nbOption;
-}
+//     while((token = strtok_r(tmp, " \n", &tmp)) != NULL) {
+//         argLine[nbOption] = malloc(strlen(token) + 1);
+//         if (argLine[nbOption] == NULL) {
+//             printf("failed to allocated memory for argLine");
+//             return -1;
+//         }
+
+//         strcat(argLine[nbOption], token);
+//         nbOption ++;
+//     }
+//     //   if (nbOption == 0) {
+//         // argLine[nbOption] = malloc(1);
+//         // strcpy(argLine[nbOption], "");
+//         // nbOption ++;
+//     //   }
+//     //   memset(line, '\0', sizeof(line));
+//     //   argLine[nbOption] = NULL;
+//     return nbOption;
+// }
 
 
