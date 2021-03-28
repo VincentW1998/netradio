@@ -119,9 +119,10 @@ int recvLIST(int descr) {
     int num_diff = atoi(str_num_diff);
     
     for(int i = 0; i < num_diff; i++) {
-        size_rec = recv(descr, buff, 99 * sizeof(char), 0);
-        buff[size_rec] = '\0';
-        printf("%s\n", buff);
+        char tmp[57];
+        size_rec = recv(descr, tmp, 56 * sizeof(char), 0);
+        tmp[size_rec] = '\0';
+        printf("%s\n", tmp);
     }
     return 0;
 }
