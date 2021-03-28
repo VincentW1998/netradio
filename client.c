@@ -100,6 +100,7 @@ int main(int argc, char ** argv) {
             if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * strlen(line));
                 port = askPort();
+                connexion(port, "LIST");
 
             }
 
