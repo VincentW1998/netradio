@@ -14,8 +14,15 @@ public class Diffuser {
         port2 = p2;
     }
 
+    public static String getFullIp(InetAddress ip){
+        String str[] = ip.getHostAddress().split("\\.");
+        return  String.format("%03d",Integer.parseInt(str[0])) +"."+
+                String.format("%03d",Integer.parseInt(str[1])) +"."+
+                String.format("%03d",Integer.parseInt(str[2])) +"."+
+                String.format("%03d",Integer.parseInt(str[3])) ;
+    }
     @Override
     public String toString() {
-        return id+" "+ip1.toString()+" "+String.valueOf(port1)+" "+ip2.toString() +" "+ String.valueOf(port2);
+        return id+" "+getFullIp(ip1)+" "+String.valueOf(port1)+" "+getFullIp(ip2) +" "+ String.valueOf(port2);
     }
 }

@@ -55,21 +55,23 @@ public class Service_Gestionnaire implements Runnable{
         register.add(currDiff);
         pw.print("REOK");
         pw.flush();
-        areUAlive();
-        register.remove(currDiff);
+        // areUAlive();
+        // register.remove(currDiff);
     }
     
     public void areUAlive(){ // check if the diffuser is still active
         try{
             String mess;
             while(true){
-                pw.print("RUOK");
-                pw.flush();
-                while((mess = br.readLine()) == null);
-                if(!mess.equals("IMOK"))
-                    return;
                 try{
-                    Thread.sleep(20000);
+                    Thread.sleep(10000);
+                    pw.print("RUOK");
+                    pw.flush();
+                    mess = br.readLine();
+                    // while((mess = br.readLine()) == null);
+                    if(mess == null || !mess.equals("IMOK"))
+                        return;
+                        // Thread.sleep(5000);
                 }
                 catch (InterruptedException ie){
                     //ignore
@@ -91,6 +93,7 @@ public class Service_Gestionnaire implements Runnable{
                     client.close();
                     return;
                 }
+                System.out.println(mess);
                 while((mess = br.readLine()) == null);
             }
         }
@@ -115,7 +118,7 @@ public class Service_Gestionnaire implements Runnable{
         try {
             String message;
             while((message = br.readLine()) == null);
-            System.out.println(message+message);
+            System.out.println(message);
             if(message.startsWith("REGI "))
                 Regi(message);
             else 
