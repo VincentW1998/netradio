@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include "h_files/manager.h"
 
-int connexion(int port) {
+int connexion(int port, char * request) {
     struct sockaddr_in adress_sock;
     memset(&adress_sock, 0, sizeof(struct sockaddr_in));
     adress_sock.sin_family = AF_INET;
@@ -40,28 +40,24 @@ int connexion(int port) {
     int r = connect(descr, (struct sockaddr *) &adress_sock, sizeof(struct sockaddr_in));
 
     if (r != -1) {
-        // char *pseudo= "WEIVincent";
-        // send(descr, pseudo, strlen(pseudo), 0);
-        char buff[100];
-        int size_rec = recv(descr, buff, 99*sizeof(char), 0);
-        buff[size_rec] = '\0';
-        printf("%s", buff);
-        // for(int i = 0; i < 5; i++) {
-        //     char * request = "PUT Ceci est un message qui fait bientot quatre-vingt caracteres, on y est 80 pile.";
-        //     send(descr, request, strlen(request), 0);
-        //     sleep(2);
-        //     memset(buff, 0, strlen(buff));
-        //     size_rec = recv(descr, buff, 99*sizeof(char), 0);
+        
+        send(descr, request, strlen(request), 0);
+        // char buff[100];
+        // int size_rec;
+        /* for LAST REQUEST*/
+        // while(strcmp(buff, "ENDM") != 0) {
+        //     size_rec = recv(descr, buff, 99 * sizeof(char), 0);
         //     buff[size_rec] = '\0';
         //     printf("%s\n", buff);
         // }
-
+        // printf("%s\n", buff);
+        // recvLAST(descr);
+        recvLIST(descr);
 
         close(descr);
     }
     return 0;
 }
-
 
 int main(int argc, char ** argv) {
     if (argc!=2) {
@@ -79,24 +75,35 @@ int main(int argc, char ** argv) {
     int nbArgLine;
     char * argLine[3]; // argument of line
     memset(argLine, '\0', 3 * sizeof(argLine[0]));
+    char newString[BUFFSIZE]; 
+    int port;
 
     while(1) {
         printPrompt();
         nbArgLine = 0;
         memset(line, '\0', sizeof(line));
         if((n = read(0, line, BUFFSIZE) > 0)) {
-            if(!strcmp(line, "quit\n")) {
+            if(!strcmp(line, "QUIT\n")) {
                 break;
             }
+            if(!strcmp(line, "HELP\n")) {
+                printMenu();
+            }
 
-            // nbArgLine = sliceLine(line, argLine);
+            if(!strcmp(line, "LAST\n")) {
+                memset(line, '\0', sizeof(char) * strlen(line));
+                port = askPort();
+                typeLAST(newString);
+                connexion(port, newString);
+            }
+
+            if (!strcmp(line, "LIST\n")) {
+                memset(line, '\0', sizeof(char) * strlen(line));
+                port = askPort();
+
+            }
+
             memset(line, '\0', BUFFSIZE);
-
-
-            // for (int i = 0; i < nbArgLine; i++) {
-            //     printf("%s ", argLine[i]);
-            // }
-            // printf("\n");
         }
     }
     return 0;

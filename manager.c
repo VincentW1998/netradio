@@ -1,21 +1,5 @@
 #include "h_files/manager.h"
 
-// int typesMessage(char * types) {
-//     int nbType = 3;
-//     char * allType[nbType] = {"LAST", "LIST", "MESS"};
-//     int idType = -1;
-    
-//     for (int i = 0; i < nbType; i ++) {
-//         if (!strcmp(allType[i], types))
-//             idType = i;
-//     }
-
-//     switch(idType) {
-//         case -1 :
-//             return -1;
-//     }
-// }
-
 // Complete id by "#" if the lenght is inferior than 8
 char * completeHashtag(char * id, int idOrMess) {
     char * tmp = malloc(sizeof(char) * idOrMess);
@@ -32,6 +16,21 @@ char * completeHashtag(char * id, int idOrMess) {
     return id;
 }
 
+/* complete num_mess, nb_mess, num_diff by "0" */
+char * completeZero(char * nb, int len) {
+    char * tmp = malloc(sizeof(char) * len);
+    int l = strlen(nb);
+    int completeLen = len - l;
+    if (completeLen > 0) {
+        for(int i = 0; i < completeLen; i++) {
+            strcat(tmp, "0");
+        }
+        strcat(tmp, nb);
+        return tmp;
+    }
+    return nb;
+}
+
 
 
 int printPrompt() {
@@ -39,33 +38,79 @@ int printPrompt() {
     return 0;
 }
 
-// slice line with space delimeter
-// int sliceLine(char * line, char ** argLine){
-//     char * tmp = malloc(strlen(line) + 1);
-//     strcpy(tmp, line);
+int printMenu() {
+    printf("LAST for ...\n");
+    printf("LIST for ...\n");
+    printf("MESS for ...\n");
+    printf("HELP for ...\n");
+    printf("QUIT for ...\n");
+    return 0;
+}
 
-//     char * token = NULL;
-//     int nbOption = 0;
-//     //   int l = strlen(line);
+/* return message [LAST nb_mess] */
+char * typeLAST(char * request) {
+    int n;
+    char * ask = "how many message do you want ? (0, 999) : ";
+    write(1, ask, strlen(ask));
+    char * tmp = malloc(sizeof(char) * 8 + 1);
+    memset(tmp, '\0', sizeof(char) * 8 + 1);
+    strcat(tmp, "LAST ");
+    char  nb_mess[4];
+    if ((n = read(0, nb_mess, 4) > 0)) {
+        strcat(tmp, nb_mess);
+    }
+    strcpy(request, tmp);
+    return tmp;
+}
 
-//     while((token = strtok_r(tmp, " \n", &tmp)) != NULL) {
-//         argLine[nbOption] = malloc(strlen(token) + 1);
-//         if (argLine[nbOption] == NULL) {
-//             printf("failed to allocated memory for argLine");
-//             return -1;
-//         }
+/* ask port between 0 and 9999 */
+int askPort() {
+    char * m = "Port (0, 9999): ";
+    int p = -1;
+    while(p <0 || p > 9999) {
+        write(1, m, strlen(m));
+        scanf("%d",&p);
+        if(p < 0 || p > 9999) {
+            printError("error : enter port between 0 and 9999\n");
+        }
+    }
+    
+    return p; 
+}
 
-//         strcat(argLine[nbOption], token);
-//         nbOption ++;
-//     }
-//     //   if (nbOption == 0) {
-//         // argLine[nbOption] = malloc(1);
-//         // strcpy(argLine[nbOption], "");
-//         // nbOption ++;
-//     //   }
-//     //   memset(line, '\0', sizeof(line));
-//     //   argLine[nbOption] = NULL;
-//     return nbOption;
-// }
+/* print error message */
+int printError(char * mess) {
+    write(2, mess, strlen(mess));
+    return 0;
+}
 
+/* par of client code for LAST request */
+int recvLAST(int descr) {
+    char buff[100];
+    int size_rec;
+    while(strcmp(buff, "ENDM") != 0) {
+        size_rec = recv(descr, buff, 99 * sizeof(char), 0);
+        buff[size_rec] = '\0';
+        printf("%s\n", buff);
+    }
+    printf("%s\n", buff);
+    return 0;
+}
 
+/* part of client code for LIST request */
+int recvLIST(int descr) {
+    char buff[100];
+    int size_rec;
+    size_rec = recv(descr, buff, 99 * sizeof(char), 0);
+    buff[size_rec] = '\0';
+    char str_num_diff[3];
+    memcpy(str_num_diff, &buff[5], 2);
+    str_num_diff[2] = '\0';
+    int num_diff = atoi(str_num_diff);
+    for(int i = 0; i < num_diff; i++) {
+        size_rec = recv(descr, buff, 99 * sizeof(char), 0);
+        buff[size_rec] = '\0';
+        printf("%s\n", buff);
+    }
+    return 0;
+}
