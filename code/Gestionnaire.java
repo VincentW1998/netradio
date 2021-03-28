@@ -17,7 +17,6 @@ public class Gestionnaire{
     public static void main(String[] args){
         try {
             ServerSocket server = connectToAvailablePort(9998);
-            // ServerSocket server = new ServerSocket(23);
             System.out.println("Gestionnaire connected to port "+server.getLocalPort());
             while(true){
                 Socket client = server.accept();
