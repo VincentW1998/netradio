@@ -10,14 +10,15 @@ public class Gestionnaire{
         }
         catch (IOException e){
             if(p == 1024)
-                return connectToAvailablePort(9999);
+                return connectToAvailablePort(9998);
             return connectToAvailablePort(p-1);
         }
     }
     public static void main(String[] args){
         try {
-            ServerSocket server = connectToAvailablePort(9999);
-            System.out.println("Gestionnaire connected to port "+server.getLocalPort()+"\n");
+            ServerSocket server = connectToAvailablePort(9998);
+            // ServerSocket server = new ServerSocket(23);
+            System.out.println("Gestionnaire connected to port "+server.getLocalPort());
             while(true){
                 Socket client = server.accept();
                 Service_Gestionnaire SG = new Service_Gestionnaire(client);
