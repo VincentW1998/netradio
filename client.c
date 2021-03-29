@@ -7,6 +7,11 @@
 #include <string.h>
 #include <netinet/in.h>
 #include "h_files/manager.h"
+#include "h_files/mess.h"
+#include "h_files/last.h"
+#include "h_files/list.h"
+
+
 
 int connexion(int port, char * request, char * ip, int cmd) {
     struct sockaddr_in adress_sock;
@@ -22,7 +27,7 @@ int connexion(int port, char * request, char * ip, int cmd) {
     }
 
     struct addrinfo * current_info = first_info;
-    int done = 0; // pour savoir si on a trouve la bonne adresse IP
+    int done = 0; 
     while(!done && current_info != NULL) {
         if(current_info -> ai_family == AF_INET) {
             struct sockaddr_in * addr_in = (struct sockaddr_in*) current_info -> ai_addr;
@@ -70,7 +75,7 @@ int main(int argc, char ** argv) {
         printf("max length of id is 8, please choose a shorter id\n");
         return 0;
     }
-    char * id = completeHashtag(argv[1], 8);
+    char * id = completeHashtagOrZero(argv[1], 8, "#");
     printf("identifiant : %s\n", id);
     int n;
     char line[BUFFSIZE];
@@ -101,14 +106,16 @@ int main(int argc, char ** argv) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = askPort();
                 typeLAST(stringLAST);
-                askIp(ip);
+                // askIp(ip);
+                askIP_ID_Message(ip, "ip adress : ");
                 connexion(port, stringLAST, ip, 1);
             }
 
             if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = askPort();
-                askIp(ip);
+                // askIp(ip);
+                askIP_ID_Message(ip, "ip adress : ");
                 connexion(port, "LIST\n", ip, 0);
 
             }

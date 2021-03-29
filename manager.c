@@ -1,7 +1,7 @@
 #include "h_files/manager.h"
 
-// Complete id by "#" if the lenght is inferior than 8
-char * completeHashtag(char * id, int idOrMess) {
+// Complete by "#" or "0"
+char * completeHashtagOrZero(char * id, int idOrMess, char * symbol) {
     char * tmp = malloc(sizeof(char) * idOrMess);
     int len = strlen(id);
     int completeLen = idOrMess - len;
@@ -9,27 +9,13 @@ char * completeHashtag(char * id, int idOrMess) {
     if (completeLen > 0) {
         strcat(tmp, id);
         for (int i = 0; i < completeLen; i++) {
-            strcat(tmp, "#");
+            strcat(tmp, symbol); 
         }
         return tmp;
     }
     return id;
 }
 
-/* complete num_mess, nb_mess, num_diff by "0" */
-char * completeZero(char * nb, int len) {
-    char * tmp = malloc(sizeof(char) * len);
-    int l = strlen(nb);
-    int completeLen = len - l;
-    if (completeLen > 0) {
-        for(int i = 0; i < completeLen; i++) {
-            strcat(tmp, "0");
-        }
-        strcat(tmp, nb);
-        return tmp;
-    }
-    return nb;
-}
 
 /* ask port between 0 and 9999 */
 int askPort() {
@@ -46,35 +32,22 @@ int askPort() {
     return p; 
 }
 
-/* ask ip adress */
-int askIp(char * ip) {
-    char * m = "ip adress : ";
-    write(1, m, strlen(m));
-    int n = read(0, ip, BUFFSIZE);
-    ip[n - 1] = '\0';
-    return 0;
+int askIP_ID_Message(char * str, char * phrase) {
+   write(1, phrase, strlen(phrase));
+   int n = read(0, str, BUFFSIZE); 
+   str[n-1] = '\0';
+   return 0;
 }
-
-int askId(char * id) {
-    char * m = "id : ";
-    write(1, m, strlen(m)); 
-    int n = read(0, id, BUFFSIZE);
-    id[n-1] = '\0';
-    return 0;
-}
-
-int askMessage(char * message) {
-    char * m = "message : ";
-    write(1, m, strlen(m));
-    int n = read(0, message, BUFFSIZE);
-    message[n-1] = '\0';
-    return 0;
-}
-
 
 
 int printPrompt() {
     write(1, "> ", 2);
+    return 0;
+}
+
+/* print error message */
+int printError(char * mess) {
+    write(2, mess, strlen(mess));
     return 0;
 }
 
@@ -87,91 +60,3 @@ int printMenu() {
     printf("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111\n");
     return 0;
 }
-
-/* return message [LAST nb_mess] */
-char * typeLAST(char * request) {
-    int n;
-    char * ask = "how many message do you want ? (0, 999) : ";
-    write(1, ask, strlen(ask));
-    char * tmp = malloc(sizeof(char) * 10);
-    memset(tmp, '\0', sizeof(char) * 10);
-    strcat(tmp, "LAST ");
-    char  nb_mess[4];
-    if ((n = read(0, nb_mess, 4) > 0)) {
-        strcat(tmp, nb_mess);
-    }
-    strcpy(request, tmp);
-    return tmp;
-}
-
-char * typeMESS(char * request) {
-    int port;
-    char ip[16];
-    port = askPort();
-    askIp(ip);
-    char * tmp = malloc(sizeof(char) * 156);
-    strcat(tmp, "MESS ");
-    char id[9];
-    askId(id);
-    strcat(tmp, id);
-    strcat(tmp, " ");
-    char message[140];
-    askMessage(message);
-    strcat(tmp, message);
-    strcat(tmp, "\n");
-    printf("tmp : %s", tmp);
-    return tmp;
-}
-
-
-/* print error message */
-int printError(char * mess) {
-    write(2, mess, strlen(mess));
-    return 0;
-}
-
-/* par of client code for LAST request */
-int recvLAST(int descr) {
-    char buff[100];
-    int size_rec;
-    while(strcmp(buff, "ENDM") != 0) {
-        size_rec = recv(descr, buff, 99 * sizeof(char), 0);
-        buff[size_rec] = '\0';
-        printf("%s\n", buff);
-    }
-    printf("%s\n", buff);
-    return 0;
-}
-
-/* part of client code for LIST request */
-int recvLIST(int descr) {
-    char buff[100];
-    int size_rec;
-    size_rec = recv(descr, buff, 99 * sizeof(char), 0);
-    buff[size_rec] = '\0';
-    printf("%s\n", buff);
-    char str_num_diff[3];
-    memcpy(str_num_diff, &buff[5], 2);
-    str_num_diff[2] = '\0';
-    int num_diff = atoi(str_num_diff);
-    
-    for(int i = 0; i < num_diff; i++) {
-        char tmp[57];
-        size_rec = recv(descr, tmp, 56 * sizeof(char), 0);
-        tmp[size_rec] = '\0';
-        printf("%s\n", tmp);
-    }
-    return 0;
-}
-
-int recvMESS(int descr) {
-    char tmp [5];
-    int size_rec;
-    size_rec = recv(descr, tmp, 4 * sizeof(char), 0);
-    tmp[size_rec] = '\0';
-    printf("%s\n", tmp);
-    return 0;
-}
-
-
-

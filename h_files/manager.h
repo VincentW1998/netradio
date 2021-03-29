@@ -9,27 +9,19 @@
 
 #define BUFFSIZE 512
 
-char * completeHashtag(char * id, int idOrMess);
+char * completeHashtagOrZero(char * id, int idOrMess, char * symbol);
+
+int askIP_ID_Message(char * str, char * phrase);
 
 int printPrompt();
 
-int typeMessage(char * type);
-
 int printMenu();
-
-char * typeLAST(char * request);
 
 int printError(char * mess);
 
 int askPort();
 
-int askIp(char * ip);
 
-int recvLAST(int descr);
+// int recvLIST(int descr);
 
-int recvLIST(int descr);
-
-char * typeMESS(char * request);
-
-int recvMESS(int descr);
 #endif
