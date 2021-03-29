@@ -56,9 +56,6 @@ int connexion(int port, char * request, char * ip, int cmd) {
                 recvMESS(descr);
                 break;
         }
-        // recvLAST(descr);
-        recvLIST(descr);
-
         close(descr);
     }
     return 0;
@@ -105,21 +102,21 @@ int main(int argc, char ** argv) {
                 port = askPort();
                 typeLAST(stringLAST);
                 askIp(ip);
-                connexion(port, stringLAST, ip);
+                connexion(port, stringLAST, ip, 1);
             }
 
             if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = askPort();
                 askIp(ip);
-                connexion(port, "LIST\n", ip);
+                connexion(port, "LIST\n", ip, 0);
 
             }
 
             if(!strcmp(line, "MESS\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 typeMESS(stringMESS);
-                connexion(port, "MESS\n", stringMESS);
+                connexion(port, "MESS\n", stringMESS, 2);
 
             }
 
