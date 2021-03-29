@@ -3,9 +3,9 @@
 
 
 char * typeMESS(char * request) {
-    int port;
+    // int port;
     char ip[16];
-    port = askPort();
+    // port = askPort();
     askIP_ID_Message(ip, "ip adress : ");
     char * tmp = malloc(sizeof(char) * 156);
     strcat(tmp, "MESS ");

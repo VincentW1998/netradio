@@ -106,7 +106,6 @@ int main(int argc, char ** argv) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = askPort();
                 typeLAST(stringLAST);
-                // askIp(ip);
                 askIP_ID_Message(ip, "ip adress : ");
                 connexion(port, stringLAST, ip, 1);
             }
@@ -114,7 +113,6 @@ int main(int argc, char ** argv) {
             if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = askPort();
-                // askIp(ip);
                 askIP_ID_Message(ip, "ip adress : ");
                 connexion(port, "LIST\n", ip, 0);
 
@@ -122,6 +120,7 @@ int main(int argc, char ** argv) {
 
             if(!strcmp(line, "MESS\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
+                port = askPort();
                 typeMESS(stringMESS);
                 connexion(port, "MESS\n", stringMESS, 2);
 

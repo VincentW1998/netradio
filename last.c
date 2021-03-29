@@ -1,17 +1,15 @@
 #include "h_files/last.h"
+#include "h_files/manager.h"
 
 /* return message [LAST nb_mess] */
 char * typeLAST(char * request) {
-    int n;
+    char  * nb_mess = malloc(sizeof(char) * 4);
     char * ask = "how many message do you want ? (0, 999) : ";
-    write(1, ask, strlen(ask));
+    askIP_ID_Message(nb_mess, ask);
     char * tmp = malloc(sizeof(char) * 10);
     memset(tmp, '\0', sizeof(char) * 10);
     strcat(tmp, "LAST ");
-    char  nb_mess[4];
-    if ((n = read(0, nb_mess, 4) > 0)) {
-        strcat(tmp, nb_mess);
-    }
+    strcat(tmp, nb_mess);
     strcpy(request, tmp);
     return tmp;
 }
