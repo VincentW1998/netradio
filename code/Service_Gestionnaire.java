@@ -104,7 +104,7 @@ public class Service_Gestionnaire implements Runnable{
         //     });
         // }
         for(int i = 0 ; i<register.size(); i++){
-            synchronized(register.get(i)) {
+            synchronized(register) {
                 pw.print("ITEM "+register.get(i).toString()+"\n");
                 pw.flush();
             }
