@@ -84,30 +84,32 @@ public class Service_Gestionnaire implements Runnable{
 
     public void client_handler(String message){
         try{
-            String mess = message;
-            while(true){
-                if(mess.equals("LIST")){
-                    sendRegister();
-                    client.close();
-                    return;
-                }
-                while((mess = br.readLine()) == null);
-                System.out.println(mess);
+            if(message.equals("LIST"))
+                sendRegister();
+            return;
             }
-        }
         catch(Exception e){
             System.out.println("client_handler :  Gestionnaire_clienthandler.java");
             e.printStackTrace();
         }
     }
 
-    public void sendRegister(){
+    public  void sendRegister(){
         pw.print("LINB "+ String.format("%02d", register.size())+"\n");
         pw.flush();
+        // synchronized (register) {
+        //     register.forEach((d) -> {
+        //         pw.print("ITEM "+d.toString()+"\n");
+        //         pw.flush();
+        //     });
+        // }
         for(int i = 0 ; i<register.size(); i++){
-            System.out.println(i);
-            pw.print("ITEM "+register.get(i).toString()+"\n");
-            pw.flush();
+            synchronized(register.get(i)) {
+                pw.print("ITEM "+register.get(i).toString()+"\n");
+                pw.flush();
+            }
+            // pw.print("ITEM "+register.get(i).toString()+"\n");
+            // pw.flush();
         }
         return;
     }
@@ -120,8 +122,9 @@ public class Service_Gestionnaire implements Runnable{
             System.out.println(message);
             if(message.startsWith("REGI "))
                 Regi(message);
-            else 
+            else
                 client_handler(message);
+            
         }
         catch(Exception e){
             System.out.println("issue in gest() : Service_Gestionnaire");

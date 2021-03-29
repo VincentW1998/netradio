@@ -10,6 +10,7 @@ char * typeLAST(char * request) {
     memset(tmp, '\0', sizeof(char) * 10);
     strcat(tmp, "LAST ");
     strcat(tmp, nb_mess);
+    strcat(tmp, "\n");
     strcpy(request, tmp);
     return tmp;
 }
@@ -17,8 +18,8 @@ char * typeLAST(char * request) {
 /* par of client code for LAST request */
 int recvLAST(int descr) {
     char buff[100];
-    int size_rec;
-    while(strcmp(buff, "ENDM") != 0) {
+    int size_rec = -1;
+    while(strcmp(buff, "ENDM") != 0 && size_rec !=0) {
         size_rec = recv(descr, buff, 99 * sizeof(char), 0);
         buff[size_rec] = '\0';
         printf("%s\n", buff);

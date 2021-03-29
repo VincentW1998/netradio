@@ -17,7 +17,7 @@ int recvLIST(int descr) {
         char tmp[57];
         size_rec = recv(descr, tmp, 56 * sizeof(char), 0);
         tmp[size_rec] = '\0';
-        printf("%s\n", tmp);
+        printf("%s", tmp);
     }
     return 0;
 }
