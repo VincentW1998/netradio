@@ -8,7 +8,7 @@
 #include <netinet/in.h>
 #include "h_files/manager.h"
 
-int connexion(int port, char * request, char * ip) {
+int connexion(int port, char * request, char * ip, int cmd) {
     struct sockaddr_in adress_sock;
     memset(&adress_sock, 0, sizeof(struct sockaddr_in));
     adress_sock.sin_family = AF_INET;
@@ -42,15 +42,20 @@ int connexion(int port, char * request, char * ip) {
     if (r != -1) {
         
         send(descr, request, strlen(request), 0);
-        // char buff[100];
-        // int size_rec;
-        /* for LAST REQUEST*/
-        // while(strcmp(buff, "ENDM") != 0) {
-        //     size_rec = recv(descr, buff, 99 * sizeof(char), 0);
-        //     buff[size_rec] = '\0';
-        //     printf("%s\n", buff);
-        // }
-        // printf("%s\n", buff);
+
+        switch(cmd) {
+            case 0: 
+                recvLIST(descr);
+                break;
+
+            case 1 :
+                recvLAST(descr);
+                break;
+            
+            case 2 :
+                recvMESS(descr);
+                break;
+        }
         // recvLAST(descr);
         recvLIST(descr);
 
@@ -75,9 +80,13 @@ int main(int argc, char ** argv) {
     int nbArgLine;
     char * argLine[3]; // argument of line
     memset(argLine, '\0', 3 * sizeof(argLine[0]));
-    char newString[BUFFSIZE]; 
+    char stringLAST[10]; 
     int port;
     char ip[16];
+    char stringMESS[156];
+
+    char * begin = "Type HELP : print all commands available !\n";
+    write(1, begin, strlen(begin));
 
     while(1) {
         printPrompt();
@@ -92,18 +101,25 @@ int main(int argc, char ** argv) {
             }
 
             if(!strcmp(line, "LAST\n")) {
-                memset(line, '\0', sizeof(char) * strlen(line));
+                memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = askPort();
-                typeLAST(newString);
+                typeLAST(stringLAST);
                 askIp(ip);
-                connexion(port, newString, ip);
+                connexion(port, stringLAST, ip);
             }
 
             if (!strcmp(line, "LIST\n")) {
-                memset(line, '\0', sizeof(char) * strlen(line));
+                memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = askPort();
                 askIp(ip);
                 connexion(port, "LIST\n", ip);
+
+            }
+
+            if(!strcmp(line, "MESS\n")) {
+                memset(line, '\0', sizeof(char) * BUFFSIZE);
+                typeMESS(stringMESS);
+                connexion(port, "MESS\n", stringMESS);
 
             }
 

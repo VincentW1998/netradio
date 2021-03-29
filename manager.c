@@ -31,38 +31,6 @@ char * completeZero(char * nb, int len) {
     return nb;
 }
 
-
-
-int printPrompt() {
-    write(1, "> ", 2);
-    return 0;
-}
-
-int printMenu() {
-    printf("LAST for ...\n");
-    printf("LIST for ...\n");
-    printf("MESS for ...\n");
-    printf("HELP for ...\n");
-    printf("QUIT for ...\n");
-    return 0;
-}
-
-/* return message [LAST nb_mess] */
-char * typeLAST(char * request) {
-    int n;
-    char * ask = "how many message do you want ? (0, 999) : ";
-    write(1, ask, strlen(ask));
-    char * tmp = malloc(sizeof(char) * 8 + 1);
-    memset(tmp, '\0', sizeof(char) * 8 + 1);
-    strcat(tmp, "LAST ");
-    char  nb_mess[4];
-    if ((n = read(0, nb_mess, 4) > 0)) {
-        strcat(tmp, nb_mess);
-    }
-    strcpy(request, tmp);
-    return tmp;
-}
-
 /* ask port between 0 and 9999 */
 int askPort() {
     char * m = "Port (0, 9999): ";
@@ -86,6 +54,75 @@ int askIp(char * ip) {
     ip[n - 1] = '\0';
     return 0;
 }
+
+int askId(char * id) {
+    char * m = "id : ";
+    write(1, m, strlen(m)); 
+    int n = read(0, id, BUFFSIZE);
+    id[n-1] = '\0';
+    return 0;
+}
+
+int askMessage(char * message) {
+    char * m = "message : ";
+    write(1, m, strlen(m));
+    int n = read(0, message, BUFFSIZE);
+    message[n-1] = '\0';
+    return 0;
+}
+
+
+
+int printPrompt() {
+    write(1, "> ", 2);
+    return 0;
+}
+
+int printMenu() {
+    printf("[+] LAST for ...\n");
+    printf("[+] LIST for ...\n");
+    printf("[+] MESS for ...\n");
+    printf("[+] HELP for ...\n");
+    printf("[+] QUIT for ...\n");
+    printf("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111\n");
+    return 0;
+}
+
+/* return message [LAST nb_mess] */
+char * typeLAST(char * request) {
+    int n;
+    char * ask = "how many message do you want ? (0, 999) : ";
+    write(1, ask, strlen(ask));
+    char * tmp = malloc(sizeof(char) * 10);
+    memset(tmp, '\0', sizeof(char) * 10);
+    strcat(tmp, "LAST ");
+    char  nb_mess[4];
+    if ((n = read(0, nb_mess, 4) > 0)) {
+        strcat(tmp, nb_mess);
+    }
+    strcpy(request, tmp);
+    return tmp;
+}
+
+char * typeMESS(char * request) {
+    int port;
+    char ip[16];
+    port = askPort();
+    askIp(ip);
+    char * tmp = malloc(sizeof(char) * 156);
+    strcat(tmp, "MESS ");
+    char id[9];
+    askId(id);
+    strcat(tmp, id);
+    strcat(tmp, " ");
+    char message[140];
+    askMessage(message);
+    strcat(tmp, message);
+    strcat(tmp, "\n");
+    printf("tmp : %s", tmp);
+    return tmp;
+}
+
 
 /* print error message */
 int printError(char * mess) {
@@ -126,4 +163,15 @@ int recvLIST(int descr) {
     }
     return 0;
 }
+
+int recvMESS(int descr) {
+    char tmp [5];
+    int size_rec;
+    size_rec = recv(descr, tmp, 4 * sizeof(char), 0);
+    tmp[size_rec] = '\0';
+    printf("%s\n", tmp);
+    return 0;
+}
+
+
 

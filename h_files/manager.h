@@ -17,7 +17,7 @@ int typeMessage(char * type);
 
 int printMenu();
 
-char * typeLAST();
+char * typeLAST(char * request);
 
 int printError(char * mess);
 
@@ -29,4 +29,7 @@ int recvLAST(int descr);
 
 int recvLIST(int descr);
 
+char * typeMESS(char * request);
+
+int recvMESS(int descr);
 #endif
