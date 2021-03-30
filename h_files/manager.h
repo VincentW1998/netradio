@@ -9,24 +9,15 @@
 
 #define BUFFSIZE 512
 
-char * completeHashtag(char * id, int idOrMess);
+char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol);
 
-int printPrompt();
+int which_ip_id_message(char * str, char * phrase);
 
-int typeMessage(char * type);
+int print_prompt();
 
-int printMenu();
+int print_menu();
 
-char * typeLAST();
+int print_error(char * mess);
 
-int printError(char * mess);
-
-int askPort();
-
-int askIp(char * ip);
-
-int recvLAST(int descr);
-
-int recvLIST(int descr);
-
+int which_port();
 #endif

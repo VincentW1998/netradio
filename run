@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo 'make clean :'
+make clean
+echo '#######################################'
+echo 'make :'
+make
+echo '#######################################'
+echo './client radio'
+./client radio
