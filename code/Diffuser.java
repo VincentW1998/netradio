@@ -25,4 +25,22 @@ public class Diffuser {
     public String toString() {
         return id + " " + getFullIp(ip1) + " " + String.valueOf(port1) + " " + getFullIp(ip2) + " " + String.valueOf(port2);
     }
+
+    public static void main(String [] args) {
+
+        try{
+            DatagramSocket udpsocket = new DatagramSocket();
+            byte[]data;
+            for(int i=0;i <= 10; i++){
+                String s="MESSAGE "+i+" \n";
+                data=s.getBytes();
+                InetSocketAddress ia = new InetSocketAddress("localhost",9998);
+                DatagramPacket paquet = new DatagramPacket(data,data.length, ia);
+                udpsocket.send(paquet);
+            }
+            udpsocket.close();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
