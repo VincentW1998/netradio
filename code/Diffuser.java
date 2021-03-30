@@ -6,7 +6,7 @@ public class Diffuser {
     private InetAddress ip1, ip2;
     private int port1, port2;
 
-    public Diffuser(String identifiant, InetAddress ipAdress1, int p1, InetAddress ipAdress2, int p2){
+    public Diffuser(String identifiant, InetAddress ipAdress1, int p1, InetAddress ipAdress2, int p2) {
         id = identifiant;
         ip1 = ipAdress1;
         ip2 = ipAdress2;
@@ -14,15 +14,15 @@ public class Diffuser {
         port2 = p2;
     }
 
-    public static String getFullIp(InetAddress ip){
+    public static String getFullIp(InetAddress ip) {
         String str[] = ip.getHostAddress().split("\\.");
-        return  String.format("%03d",Integer.parseInt(str[0])) +"."+
-                String.format("%03d",Integer.parseInt(str[1])) +"."+
-                String.format("%03d",Integer.parseInt(str[2])) +"."+
-                String.format("%03d",Integer.parseInt(str[3])) ;
+        return String.format("%03d", Integer.parseInt(str[0])) + "." +
+            String.format("%03d", Integer.parseInt(str[1])) + "." +
+            String.format("%03d", Integer.parseInt(str[2])) + "." +
+            String.format("%03d", Integer.parseInt(str[3]));
     }
     @Override
     public String toString() {
-        return id+" "+getFullIp(ip1)+" "+String.valueOf(port1)+" "+getFullIp(ip2) +" "+ String.valueOf(port2);
+        return id + " " + getFullIp(ip1) + " " + String.valueOf(port1) + " " + getFullIp(ip2) + " " + String.valueOf(port2);
     }
 }

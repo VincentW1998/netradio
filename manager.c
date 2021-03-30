@@ -5,19 +5,18 @@ char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol) {
     char * tmp = malloc(sizeof(char) * idOrMess);
     int len = strlen(id);
     int complete_len = idOrMess - len;
-
     if (complete_len > 0) {
         if(!strcmp(symbol, "#")) {
             strcat(tmp, id);
-        }
+        } /* if valid */
         for (int i = 0; i < complete_len; i++) {
             strcat(tmp, symbol); 
         }
         if(!strcmp(symbol, "0")) {
             strcat(tmp, id);
-        }
+        } /* if valid */
         return tmp;
-    }
+    } /* if valid */
     return id;
 }
 
@@ -31,7 +30,7 @@ int which_port() {
         scanf("%d",&p);
         if(p < 0 || p > 9999) {
             print_error("error : enter port between 0 and 9999\n");
-        }
+        } /* if valid */
     }
     
     return p; 

@@ -20,9 +20,8 @@ char * type_mess(char * request) {
     return tmp;
 }
 
-
 int recv_for_mess(int descr) {
-    char tmp [5];
+    char tmp[5];
     int size_rec;
     size_rec = recv(descr, tmp, 4 * sizeof(char), 0);
     tmp[size_rec] = '\0';
