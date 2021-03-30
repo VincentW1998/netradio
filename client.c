@@ -62,6 +62,13 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
     return 0;
 }
 
+sig_atomic_t volatile g_running = 1;
+
+void sig_handler(int signum) {
+    if(signum == SIGINT) {
+        g_running = 0;
+    }
+}
 
 int connexion_udp(int port, char * ip) {
     int sock=socket(PF_INET,SOCK_DGRAM,0);
@@ -75,12 +82,13 @@ int connexion_udp(int port, char * ip) {
     address_sock.sin_addr.s_addr=htonl(INADDR_ANY);
     r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
     struct ip_mreq mreq;
-    // mreq.imr_multiaddr.s_addr=inet_addr("225.1.2.4");
     mreq.imr_multiaddr.s_addr=inet_addr(ip);
     mreq.imr_interface.s_addr=htonl(INADDR_ANY);
     r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
     char tampon[100];
-    while(1) {
+    signal(SIGINT, &sig_handler); // catch CTR+C signal
+    g_running = 1;
+    while(g_running) {// CTR+C break the loop
         int rec=recv(sock,tampon,100,0);
         tampon[rec]='\0';
         printf("Message recu : %s\n",tampon);
