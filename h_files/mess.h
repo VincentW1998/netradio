@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
-char * typeMESS(char * request);
+char * type_mess(char * request);
 
-int recvMESS(int descr);
+int recv_for_mess(int descr);
 
 #endif

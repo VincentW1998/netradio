@@ -2,20 +2,18 @@
 #include "h_files/manager.h"
 
 
-char * typeMESS(char * request) {
-    // int port;
+char * type_mess(char * request) {
     char ip[16];
-    // port = askPort();
-    askIP_ID_Message(ip, "ip adress : ");
+    which_ip_id_message(ip, "ip adress : ");
     char * tmp = malloc(sizeof(char) * 156);
     strcat(tmp, "MESS ");
     char * id = malloc(sizeof(char) * 9);
-    askIP_ID_Message(id, "id : ");
-    id = completeHashtagOrZero(id, 8, "#");
+    which_ip_id_message(id, "id : ");
+    id = fill_hashtag_or_zero(id, 8, "#");
     strcat(tmp, id);
     strcat(tmp, " ");
     char message[140];
-    askIP_ID_Message(message, "message : ");
+    which_ip_id_message(message, "message : ");
     strcat(tmp, message);
     strcat(tmp, "\n");
     printf("tmp : %s", tmp);
@@ -23,7 +21,7 @@ char * typeMESS(char * request) {
 }
 
 
-int recvMESS(int descr) {
+int recv_for_mess(int descr) {
     char tmp [5];
     int size_rec;
     size_rec = recv(descr, tmp, 4 * sizeof(char), 0);

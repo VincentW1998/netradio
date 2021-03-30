@@ -50,15 +50,15 @@ int connexion(int port, char * request, char * ip, int cmd) {
 
         switch(cmd) {
             case 0: 
-                recvLIST(descr);
+                recv_for_list(descr);
                 break;
 
             case 1 :
-                recvLAST(descr);
+                recv_for_last(descr);
                 break;
             
             case 2 :
-                recvMESS(descr);
+                recv_for_mess(descr);
                 break;
         }
         close(descr);
@@ -75,54 +75,54 @@ int main(int argc, char ** argv) {
         printf("max length of id is 8, please choose a shorter id\n");
         return 0;
     }
-    char * id = completeHashtagOrZero(argv[1], 8, "#");
+    char * id = fill_hashtag_or_zero(argv[1], 8, "#");
     printf("identifiant : %s\n", id);
     int n;
     char line[BUFFSIZE];
-    int nbArgLine;
-    char * argLine[3]; // argument of line
-    memset(argLine, '\0', 3 * sizeof(argLine[0]));
-    char stringLAST[10]; 
+    int nb_arg_line;
+    char * arg_line[3]; // argument of line
+    memset(arg_line, '\0', 3 * sizeof(arg_line[0]));
+    char str_last[10]; 
     int port;
     char ip[16];
-    char stringMESS[156];
+    char str_mess[156];
 
     char * begin = "Type HELP : print all commands available !\n";
     write(1, begin, strlen(begin));
 
     while(1) {
-        printPrompt();
-        nbArgLine = 0;
+        print_prompt();
+        nb_arg_line = 0;
         memset(line, '\0', sizeof(line));
         if((n = read(0, line, BUFFSIZE) > 0)) {
             if(!strcmp(line, "QUIT\n")) {
                 break;
             }
             if(!strcmp(line, "HELP\n")) {
-                printMenu();
+                print_menu();
             }
 
             if(!strcmp(line, "LAST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = askPort();
-                typeLAST(stringLAST);
-                askIP_ID_Message(ip, "ip adress : ");
-                connexion(port, stringLAST, ip, 1);
+                port = which_port();
+                type_last(str_last);
+                which_ip_id_message(ip, "ip adress : ");
+                connexion(port, str_last, ip, 1);
             }
 
             if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = askPort();
-                askIP_ID_Message(ip, "ip adress : ");
+                port = which_port();
+                which_ip_id_message(ip, "ip adress : ");
                 connexion(port, "LIST\n", ip, 0);
 
             }
 
             if(!strcmp(line, "MESS\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = askPort();
-                typeMESS(stringMESS);
-                connexion(port, "MESS\n", stringMESS, 2);
+                port = which_port();
+                type_mess(str_mess);
+                connexion(port, "MESS\n", str_mess, 2);
 
             }
 

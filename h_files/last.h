@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
-char * typeLAST(char * request);
+char * type_last(char * request);
 
-int recvLAST(int descr);
+int recv_for_last(int descr);
 
 #endif

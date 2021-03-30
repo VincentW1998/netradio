@@ -2,7 +2,7 @@
 
 
 /* part of client code for LIST request */
-int recvLIST(int descr) {
+int recv_for_list(int descr) {
     char buff[100];
     int size_rec;
     size_rec = recv(descr, buff, 99 * sizeof(char), 0);

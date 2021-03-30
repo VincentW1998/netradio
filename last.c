@@ -2,10 +2,10 @@
 #include "h_files/manager.h"
 
 /* return message [LAST nb_mess] */
-char * typeLAST(char * request) {
+char * type_last(char * request) {
     char  * nb_mess = malloc(sizeof(char) * 4);
     char * ask = "how many message do you want ? (0, 999) : ";
-    askIP_ID_Message(nb_mess, ask);
+    which_ip_id_message(nb_mess, ask);
     char * tmp = malloc(sizeof(char) * 10);
     memset(tmp, '\0', sizeof(char) * 10);
     strcat(tmp, "LAST ");
@@ -16,7 +16,7 @@ char * typeLAST(char * request) {
 }
 
 /* par of client code for LAST request */
-int recvLAST(int descr) {
+int recv_for_last(int descr) {
     char buff[100];
     int size_rec = -1;
     while(strcmp(buff, "ENDM") != 0 && size_rec !=0) {
