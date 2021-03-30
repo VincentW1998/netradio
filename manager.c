@@ -7,9 +7,14 @@ char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol) {
     int complete_len = idOrMess - len;
 
     if (complete_len > 0) {
-        strcat(tmp, id);
+        if(!strcmp(symbol, "#")) {
+            strcat(tmp, id);
+        }
         for (int i = 0; i < complete_len; i++) {
             strcat(tmp, symbol); 
+        }
+        if(!strcmp(symbol, "0")) {
+            strcat(tmp, id);
         }
         return tmp;
     }
