@@ -10,6 +10,7 @@
 #include "h_files/mess.h"
 #include "h_files/last.h"
 #include "h_files/list.h"
+#include <signal.h>
 
 
 int connexion_tcp(int port, char * request, char * ip, int cmd) {
@@ -61,26 +62,30 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
     return 0;
 }
 
-int connexion_udp() {
+
+int connexion_udp(int port, char * ip) {
     int sock=socket(PF_INET,SOCK_DGRAM,0);
-    sock=socket(PF_INET,SOCK_DGRAM,0);
+    int ok=1;
+    int r=setsockopt(sock,SOL_SOCKET,SO_REUSEPORT,&ok,sizeof(ok));
+    // salle de TP a la fac !
+    // int r = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &ok, sizeof(ok));
     struct sockaddr_in address_sock;
     address_sock.sin_family=AF_INET;
-    address_sock.sin_port=htons(9998);
+    address_sock.sin_port=htons(port);
     address_sock.sin_addr.s_addr=htonl(INADDR_ANY);
-    int r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
-    struct sockaddr_in emet;
-    socklen_t a=sizeof(emet);
-    if(r==0){
-        char tampon[100];
-        while(1){
-        int rec=recvfrom(sock,tampon,100,0,(struct sockaddr *)&emet,&a);
+    r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
+    struct ip_mreq mreq;
+    // mreq.imr_multiaddr.s_addr=inet_addr("225.1.2.4");
+    mreq.imr_multiaddr.s_addr=inet_addr(ip);
+    mreq.imr_interface.s_addr=htonl(INADDR_ANY);
+    r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
+    char tampon[100];
+    while(1) {
+        int rec=recv(sock,tampon,100,0);
         tampon[rec]='\0';
         printf("Message recu : %s\n",tampon);
-        printf("Port de l'emetteur: %d\n",ntohs(emet.sin_port));
-        printf("Adresse de l'emetteur: %s\n",inet_ntoa(emet.sin_addr)); 
-        }
     }
+    close(sock);
     return 0;
 }
 
@@ -105,50 +110,57 @@ int main(int argc, char ** argv) {
     char str_mess[156];
     /* END OF INITIALISATION VARIABLES */
 
-    char * id = fill_hashtag_or_zero(argv[1], 8, "#");
-    printf("identifiant : %s\n", id);
+    char * id_client = fill_hashtag_or_zero(argv[1], 8, "#");
+    printf("identifiant : %s\n", id_client);
     char * begin = "Type HELP : print all commands available !\n";
     write(1, begin, strlen(begin));
-    // connexion_udp();
+
 
     while (1) {
         print_prompt();
         nb_arg_line = 0;
         memset(line, '\0', sizeof(line));
-
-        /* for TCP */
         if ((n = read(0, line, BUFFSIZE) > 0)) {
             if (!strcmp(line, "QUIT\n")) {
                 break;
             }
-            if (!strcmp(line, "HELP\n")) {
+            else if (!strcmp(line, "HELP\n")) {
                 print_menu();
             }
 
-            if (!strcmp(line, "LAST\n")) {
+            else if (!strcmp(line, "LAST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
                 type_last(str_last);
-                which_ip_id_message(ip, "ip adress : ");
+                which_ip_id_message(ip, "ip adress : ", IPSIZE);
                 connexion_tcp(port, str_last, ip, 1);
             }
 
-            if (!strcmp(line, "LIST\n")) {
+            else if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
-                which_ip_id_message(ip, "ip adress : ");
+                which_ip_id_message(ip, "ip adress : ", IPSIZE);
                 connexion_tcp(port, "LIST\n", ip, 0);
 
             }
 
-            if (!strcmp(line, "MESS\n")) {
+            else if (!strcmp(line, "MESS\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
                 type_mess(str_mess);
                 connexion_tcp(port, "MESS\n", str_mess, 2);
-
             }
 
+            else if (!strcmp(line, "LISTEN\n")) {
+                memset(line, '\0', sizeof(char) * BUFFSIZE);
+                port = which_port();
+                which_ip_id_message(ip, "ip adress of multicast: ", IPSIZE);
+                connexion_udp(9998, ip);
+            }
+            else {
+                print_error("didn't find your cmd, try again\n");
+
+            }
             memset(line, '\0', BUFFSIZE);
         }
     }

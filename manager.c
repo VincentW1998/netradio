@@ -28,21 +28,24 @@ int which_port() {
     while(p <0 || p > 9999) {
         write(1, m, strlen(m));
         scanf("%d",&p);
+        while(getchar() != '\n');
         if(p < 0 || p > 9999) {
             print_error("error : enter port between 0 and 9999\n");
         } /* if valid */
     }
-    
     return p; 
 }
 
-int which_ip_id_message(char * str, char * phrase) {
-   write(1, phrase, strlen(phrase));
-   int n = read(0, str, BUFFSIZE); 
-   str[n-1] = '\0';
-   return 0;
+int which_ip_id_message(char * str, char * phrase, int max_length) {
+    int n = max_length + 1;
+    while(n > max_length) {
+        memset(str, '\0', sizeof(char) * max_length);
+        write(1, phrase, strlen(phrase));
+        n = read(0, str, BUFFSIZE);
+        str[n-1] = '\0';
+    }
+    return 0;
 }
-
 
 int print_prompt() {
     write(1, "> ", 2);
@@ -62,5 +65,6 @@ int print_menu() {
     printf("[+] HELP for ...\n");
     printf("[+] QUIT for ...\n");
     printf("11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111\n");
+    printf("225.1.2.4\n");
     return 0;
 }

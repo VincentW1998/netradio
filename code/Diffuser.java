@@ -31,14 +31,14 @@ public class Diffuser {
         try{
             DatagramSocket udpsocket = new DatagramSocket();
             byte[]data;
-            for(int i=0;i <= 10; i++){
-                String s="MESSAGE "+i+" \n";
+            while(true) {
+                Thread.sleep(3000);
+                String s="Hello\n";
                 data=s.getBytes();
-                InetSocketAddress ia = new InetSocketAddress("localhost",9998);
+                InetSocketAddress ia = new InetSocketAddress("225.1.2.4",9998);
                 DatagramPacket paquet = new DatagramPacket(data,data.length, ia);
                 udpsocket.send(paquet);
             }
-            udpsocket.close();
         } catch(Exception e){
             e.printStackTrace();
         }
