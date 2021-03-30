@@ -36,9 +36,10 @@ int which_port() {
     return p; 
 }
 
+/* function for asking id or ip or message, depends of the situation */
 int which_ip_id_message(char * str, char * phrase, int max_length) {
     int n = max_length + 1;
-    while(n > max_length) {
+    while(n > max_length) { // until we got the good format or length
         memset(str, '\0', sizeof(char) * max_length);
         write(1, phrase, strlen(phrase));
         n = read(0, str, BUFFSIZE);

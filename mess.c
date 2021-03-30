@@ -1,7 +1,7 @@
 #include "h_files/mess.h"
 #include "h_files/manager.h"
 
-
+/* ask ip, id, message for [MESS id message] */
 char * type_mess(char * request) {
     memset(request, '\0', sizeof(char) * 156);
     char * ip = malloc(sizeof(char) * IPSIZE);
@@ -33,6 +33,7 @@ char * type_mess(char * request) {
     return request;
 }
 
+/* Wait [ACKM] message from broadcaster */
 int recv_for_mess(int descr) {
     char tmp[5];
     int size_rec;
