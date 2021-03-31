@@ -65,15 +65,19 @@ public class Diffuser {
 
     public static void main(String [] args){
         try{
-            assert args.length != 2;
+            // assert args.length != 2;
+            if (args.length < 2) {
+                System.out.println("need id (8 char max) and handler port (4 char max)\n");
+                System.exit(1);
+            }
             int p = Integer.parseInt(args[1]);
-            ServerSocket server = connectToAvailablePort(9998);
-            Socket diff_gest = new Socket("localhost", p);
+            ServerSocket server = connectToAvailablePort(9998); //port reception
+            Socket diff_gest = new Socket("localhost", p); // port gestionnaire
             Diffuser d = new Diffuser(args[0], server.getInetAddress(), p,  server.getInetAddress(), server.getLocalPort()); // not ok broadcast ip and port needs to be changed
             d.getRegistered(diff_gest);
-            ImAlive ia = new ImAlive(diff_gest);
-            Thread imAliveCheck = new Thread(ia);
-            imAliveCheck.start();
+            // ImAlive ia = new ImAlive(diff_gest);
+            // Thread imAliveCheck = new Thread(ia);
+            // imAliveCheck.start();
             while(true){
                 Socket client = server.accept();
                 Service_Diffuser SD = new Service_Diffuser(client);
