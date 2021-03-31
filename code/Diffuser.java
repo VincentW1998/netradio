@@ -6,8 +6,25 @@ public class Diffuser {
     private InetAddress ip1, ip2;
     private int port1, port2;
     private Socket gestionnaire;
-    // private BufferedReader br;
-    // private PrintWriter pw;
+    
+    public static String fill_hashtag_or_zero(String str, int len, String symbol) {
+        String tmp = "";
+        int length = str.length();
+        int complete_len = len - length;
+        if (complete_len > 0) {
+            if(symbol.equals("#")) {
+                tmp += str;
+            }
+            for(int i = 0; i < complete_len; i++) {
+                tmp += symbol;
+            }
+            if(symbol.equals("0")) {
+                tmp += str;
+            }
+            return tmp;
+        }
+        return str; 
+    }
 
     public Diffuser(String identifiant, InetAddress ipAdress1, int p1, InetAddress ipAdress2, int p2) {
         id = identifiant;
@@ -65,7 +82,6 @@ public class Diffuser {
 
     public static void main(String [] args){
         try{
-            // assert args.length != 2;
             if (args.length < 2) {
                 System.out.println("need id (8 char max) and handler port (4 char max)\n");
                 System.exit(1);
@@ -73,7 +89,8 @@ public class Diffuser {
             int p = Integer.parseInt(args[1]);
             ServerSocket server = connectToAvailablePort(9998); //port reception
             Socket diff_gest = new Socket("localhost", p); // port gestionnaire
-            Diffuser d = new Diffuser(args[0], server.getInetAddress(), p,  server.getInetAddress(), server.getLocalPort()); // not ok broadcast ip and port needs to be changed
+            String id_diffuseur = fill_hashtag_or_zero(args[0], 8, "#");
+            Diffuser d = new Diffuser(id_diffuseur, server.getInetAddress(), p,  server.getInetAddress(), server.getLocalPort()); // not ok broadcast ip and port needs to be changed
             d.getRegistered(diff_gest);
             // ImAlive ia = new ImAlive(diff_gest);
             // Thread imAliveCheck = new Thread(ia);
@@ -85,11 +102,9 @@ public class Diffuser {
                 Thread t = new Thread(SD);
                 t.start();
             }
-
-
         }
         catch(Exception e){
-
+            e.printStackTrace();
         }
         
 
