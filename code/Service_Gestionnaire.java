@@ -116,6 +116,7 @@ public class Service_Gestionnaire implements Runnable {
         pw.print("LINB " + String.format("%02d", register.size()) + "\n");
         pw.flush();
         for (int i = 0; i < register.size(); i++) {
+            // synchronized(register.get(i)) {
             synchronized(register) {
                 pw.print("ITEM " + register.get(i).toString() + "\n");
                 pw.flush();

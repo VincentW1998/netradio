@@ -5,8 +5,8 @@
 char * type_last(char * request) {
     char * nb_mess = malloc(sizeof(char) * 4);
     char * ask = "how many message do you want ? (0, 999) : ";
-    which_ip_id_message(nb_mess, ask);
-    nb_mess = fill_hashtag_or_zero(nb_mess, 3, "0");
+    which_ip_id_message(nb_mess, ask, SIZENBMESS);
+    nb_mess = fill_hashtag_or_zero(nb_mess, SIZENBMESS, "0");
     char * tmp = malloc(sizeof(char) * 10);
     memset(tmp, '\0', sizeof(char) * 10);
     strcat(tmp, "LAST ");

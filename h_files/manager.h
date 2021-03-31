@@ -8,10 +8,14 @@
 #include <sys/socket.h>
 
 #define BUFFSIZE 512
+#define IDSIZE 8
+#define MESSSIZE 140
+#define IPSIZE 15
+#define SIZENBMESS 3
 
 char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol);
 
-int which_ip_id_message(char * str, char * phrase);
+int which_ip_id_message(char * str, char * phrase, int max_length);
 
 int print_prompt();
 
