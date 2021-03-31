@@ -80,6 +80,19 @@ public class Diffuser {
         }
     }
 
+    public static int portLeft(int p) {
+        try{
+            ServerSocket server = new ServerSocket(p);
+            server.close();
+            return p;
+        } catch (IOException e) {
+            if (p == 1024){
+                return portLeft(9998);
+            }
+            return portLeft(p - 1);
+        }
+    } 
+
     public static void main(String [] args){
         try{
             if (args.length < 2) {
@@ -90,7 +103,10 @@ public class Diffuser {
             ServerSocket server = connectToAvailablePort(9998); //port reception
             Socket diff_gest = new Socket("localhost", p); // port gestionnaire
             String id_diffuseur = fill_hashtag_or_zero(args[0], 8, "#");
-            Diffuser d = new Diffuser(id_diffuseur, server.getInetAddress(), p,  server.getInetAddress(), server.getLocalPort()); // not ok broadcast ip and port needs to be changed
+            int portMultiDiff = portLeft(9998);
+
+
+            Diffuser d = new Diffuser(id_diffuseur, InetAddress.getByName("225.1.2.4"), portMultiDiff,  server.getInetAddress(), server.getLocalPort()); // not ok broadcast ip and port needs to be changed
             d.getRegistered(diff_gest);
             // ImAlive ia = new ImAlive(diff_gest);
             // Thread imAliveCheck = new Thread(ia);
@@ -110,19 +126,18 @@ public class Diffuser {
 
     }
 
-    // public static void main(String [] args) {
-
+    // public  static void main(String[] args){
     //     try{
-    //         DatagramSocket udpsocket = new DatagramSocket();
+    //         DatagramSocket dso=new DatagramSocket();
     //         byte[]data;
     //         for(int i=0;i <= 10; i++){
     //             String s="MESSAGE "+i+" \n";
     //             data=s.getBytes();
-    //             InetSocketAddress ia = new InetSocketAddress("localhost",9998);
-    //             DatagramPacket paquet = new DatagramPacket(data,data.length, ia);
-    //             udpsocket.send(paquet);
+    //             InetSocketAddress ia=new InetSocketAddress("225.1.2.4",9999);
+    //             DatagramPacket paquet=new 
+	// 					DatagramPacket(data,data.length,ia);
+    //             dso.send(paquet);
     //         }
-    //         udpsocket.close();
     //     } catch(Exception e){
     //         e.printStackTrace();
     //     }
