@@ -42,6 +42,7 @@ public class Service_Gestionnaire implements Runnable {
     }
 
     public void Regi(String message) throws IOException {
+        Diffuser currDiff;
         synchronized (register) {
             String splitRegi[] = message.split(" ");
             if (!isGoodRegi(splitRegi) || register.size() >= maxDiff) { // check if the REGI message has the correct amount of arguments
@@ -51,18 +52,22 @@ public class Service_Gestionnaire implements Runnable {
                 client.close();
                 return;
             }
-            String id = splitRegi[1];
-            InetAddress ip1 = InetAddress.getByName(splitRegi[2]);
-            int port1 = Integer.parseInt(splitRegi[3]);
-            InetAddress ip2 = InetAddress.getByName(splitRegi[4]);
-            int port2 = Integer.parseInt(splitRegi[5]);
-            Diffuser currDiff = new Diffuser(id, ip1, port1, ip2, port2);
+            currDiff = new Diffuser(
+                splitRegi[1] ,
+                InetAddress.getByName(splitRegi[2]),
+                Integer.parseInt(splitRegi[3]),
+                InetAddress.getByName(splitRegi[4]),
+                Integer.parseInt(splitRegi[5])
+                );
             register.add(currDiff);
+        }
             pw.print("REOK\n");
             pw.flush();
             areUAlive();
+        synchronized (register) {
             register.remove(currDiff);
         }
+        
     }
 
     public void areUAlive() { // check if the diffuser is still active
