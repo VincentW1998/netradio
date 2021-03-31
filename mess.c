@@ -21,14 +21,15 @@ char * type_mess(char * request) {
     char * message = malloc(sizeof(char) * MESSSIZE);
     memset(message, '\0', sizeof(char) * MESSSIZE);
     which_ip_id_message(message, "message : ", MESSSIZE);
-    message = fill_hashtag_or_zero(message, MESSSIZE, "#");
     strcat(tmp, message);
     strcat(tmp, "\n");
     strcpy(request, tmp);
+
     free(tmp);
     free(ip);
     free(id);
     free(message);
+    printf("msg : %s\n", request);
     return request;
 }
 

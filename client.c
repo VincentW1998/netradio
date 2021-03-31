@@ -85,11 +85,11 @@ int connexion_udp(int port, char * ip) {
     mreq.imr_multiaddr.s_addr=inet_addr(ip);
     mreq.imr_interface.s_addr=htonl(INADDR_ANY);
     r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
-    char tampon[162];
+    char tampon[100];
     signal(SIGINT, &sig_handler); // catch CTR+C signal
     g_running = 1;
     while(g_running) {// CTR+C break the loop
-        int rec=recv(sock,tampon,162,0);
+        int rec=recv(sock,tampon,100,0);
         tampon[rec]='\0';
         printf("Message recu : %s\n",tampon);
     }
@@ -156,7 +156,7 @@ int main(int argc, char ** argv) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
                 type_mess(str_mess);
-                connexion_tcp(port, str_mess, ip, 2);
+                connexion_tcp(port, "MESS\n", str_mess, 2);
             }
 
             else if (!strcmp(line, "LISTEN\n")) {

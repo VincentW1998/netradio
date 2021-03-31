@@ -54,11 +54,7 @@ public class Diffuser {
 
     public static void main(String [] args){
         try{
-            // assert args.length != 2;
-            if (args.length < 2) {
-                System.out.println("need id (8 char max) and handler port (4 char max)\n");
-                System.exit(1);
-            }
+            assert args.length != 2;
             int p = Integer.parseInt(args[1]);
             ServerSocket reception = connectToAvailablePort(9998); 
             Socket connexionToGestionnaire = new Socket("localhost", p);
