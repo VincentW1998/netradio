@@ -155,7 +155,7 @@ int main(int argc, char ** argv) {
             else if (!strcmp(line, "MESS\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
-                type_mess(str_mess);
+                type_mess(str_mess, id_client);
                 connexion_tcp(port, str_mess, ip, 2);
             }
 

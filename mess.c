@@ -2,20 +2,13 @@
 #include "h_files/manager.h"
 
 /* ask ip, id, message for [MESS id message] */
-char * type_mess(char * request) {
+char * type_mess(char * request, char * id) {
     memset(request, '\0', sizeof(char) * 156);
     char * ip = malloc(sizeof(char) * IPSIZE);
     memset(ip, '\0', sizeof(char) * IPSIZE);
-
     which_ip_id_message(ip, "ip adress : ", IPSIZE);
-
     char * tmp = malloc(sizeof(char) * 156);
     strcat(tmp, "MESS ");
-
-    char * id = malloc(sizeof(char) * IDSIZE);
-    which_ip_id_message(id, "id (8 char max): ", IDSIZE);
-    id = fill_hashtag_or_zero(id, IDSIZE, "#");
-    
     strcat(tmp, id);
     strcat(tmp, " ");
     char * message = malloc(sizeof(char) * MESSSIZE);

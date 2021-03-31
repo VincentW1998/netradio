@@ -25,12 +25,12 @@ char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol) {
 int which_port() {
     char * m = "Port (0, 9998): ";
     int p = -1;
-    while(p <0 || p > 9999) {
+    while(p <0 || p > 9998) {
         write(1, m, strlen(m));
         scanf("%d",&p);
         while(getchar() != '\n');
-        if(p < 0 || p > 9999) {
-            print_error("error : enter port between 0 and 9999\n");
+        if(p < 0 || p > 9998) {
+            print_error("error : enter port between 0 and 9998\n");
         } /* if valid */
     }
     return p; 
@@ -38,8 +38,8 @@ int which_port() {
 
 /* function for asking id or ip or message, depends of the situation */
 int which_ip_id_message(char * str, char * phrase, int max_length) {
-    int n = max_length + 1;
-    while(n > max_length) { // until we got the good format or length
+    int n = max_length + 2;
+    while(n > max_length + 1) { // until we got the good format or length
         memset(str, '\0', sizeof(char) * max_length);
         write(1, phrase, strlen(phrase));
         n = read(0, str, BUFFSIZE);
