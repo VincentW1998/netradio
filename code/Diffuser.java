@@ -32,7 +32,6 @@ public class Diffuser {
         ip2 = ipAdress2;
         port1 = p1;
         port2 = p2;
-    
     }
 
     public static String getFullIp(InetAddress ip) {
@@ -47,21 +46,14 @@ public class Diffuser {
         return id + " " + getFullIp(ip1) + " " + String.valueOf(port1) + " " + getFullIp(ip2) + " " + String.valueOf(port2);
     }
 
-    public void getRegistered(Socket gestionnaire){ // will try to register until REOK is received
+    public void getRegistered(BufferedReader br, PrintWriter pw){ // will try to register until REOK is received
         try{   
-            BufferedReader br = new BufferedReader(new InputStreamReader(gestionnaire.getInputStream()));
-            PrintWriter pw = new PrintWriter(new OutputStreamWriter(gestionnaire.getOutputStream()));
             pw.print("REGI "+toString()+"\n");
             pw.flush();
-            String message;
-            while((message = br.readLine()) == null);
+            String message = br.readLine();
             System.out.println("message received : "+message);
-            if(message.equals("REOK"))
-                return;
-            getRegistered(gestionnaire);
-            // message = br.readLine();
-            // System.out.println(message);
-            // System.out.println("finished");
+            if(!message.equals("REOK"))
+                getRegistered(br, pw);
         }
         catch(Exception e){
             System.out.println("registration error");
@@ -112,7 +104,7 @@ public class Diffuser {
             // Thread imAliveCheck = new Thread(ia);
             // imAliveCheck.start();
             while(true){
-                Socket client = server.accept();
+                Socket client = reception.accept();
                 Service_Diffuser SD = new Service_Diffuser(client);
                 System.out.println("New connection detected");
                 Thread t = new Thread(SD);
@@ -122,24 +114,5 @@ public class Diffuser {
         catch(Exception e){
             e.printStackTrace();
         }
-        
-
     }
-
-    // public  static void main(String[] args){
-    //     try{
-    //         DatagramSocket dso=new DatagramSocket();
-    //         byte[]data;
-    //         for(int i=0;i <= 10; i++){
-    //             String s="MESSAGE "+i+" \n";
-    //             data=s.getBytes();
-    //             InetSocketAddress ia=new InetSocketAddress("225.1.2.4",9999);
-    //             DatagramPacket paquet=new 
-	// 					DatagramPacket(data,data.length,ia);
-    //             dso.send(paquet);
-    //         }
-    //     } catch(Exception e){
-    //         e.printStackTrace();
-    //     }
-    // }
 }

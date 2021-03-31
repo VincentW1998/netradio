@@ -42,58 +42,56 @@ public class Service_Gestionnaire implements Runnable {
     }
 
     public void Regi(String message) throws IOException {
-        String splitRegi[] = message.split(" ");
-        if (!isGoodRegi(splitRegi) || register.size() >= maxDiff) { // check if the REGI message has the correct amount of arguments
-            System.out.println("Issue with Regi message, connection closed");
-            pw.print("RENO\n");
+        synchronized (register) {
+            String splitRegi[] = message.split(" ");
+            if (!isGoodRegi(splitRegi) || register.size() >= maxDiff) { // check if the REGI message has the correct amount of arguments
+                System.out.println("Issue with Regi message, connection closed");
+                pw.print("RENO\n");
+                pw.flush();
+                client.close();
+                return;
+            }
+            String id = splitRegi[1];
+            InetAddress ip1 = InetAddress.getByName(splitRegi[2]);
+            int port1 = Integer.parseInt(splitRegi[3]);
+            InetAddress ip2 = InetAddress.getByName(splitRegi[4]);
+            int port2 = Integer.parseInt(splitRegi[5]);
+            Diffuser currDiff = new Diffuser(id, ip1, port1, ip2, port2);
+            register.add(currDiff);
+            pw.print("REOK\n");
             pw.flush();
-            client.close();
-            return;
+            areUAlive();
+            register.remove(currDiff);
         }
-        String id = splitRegi[1];
-        InetAddress ip1 = InetAddress.getByName(splitRegi[2]);
-        int port1 = Integer.parseInt(splitRegi[3]);
-        InetAddress ip2 = InetAddress.getByName(splitRegi[4]);
-        int port2 = Integer.parseInt(splitRegi[5]);
-        Diffuser currDiff = new Diffuser(id, ip1, port1, ip2, port2);
-        register.add(currDiff);
-        pw.print("REOK\n");
-        pw.flush();
-        // areUAlive();
-        // register.remove(currDiff);
     }
 
     public void areUAlive() { // check if the diffuser is still active
         try {
-            String mess = "";
+            String mess;
             while (true) {
-                try {
-                    pw.print("RUOK\n");
-                    pw.flush();
-                    try{
-                        mess = CompletableFuture.supplyAsync(() -> {
-                            try {
-                                return br.readLine();
-                                
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                return null;
-                            }
-                        })
-                        .get(5, TimeUnit.SECONDS);
-                    }
-                    catch(TimeoutException te){
-                        pw.print("RUOK\n");
-                        pw.flush();
-                        System.out.println("time out diffuser released");
-                        return;
-                    }
-                    if (mess == null || !mess.equals("IMOK\n"))
-                        return;
-                    Thread.sleep(5000);
-                } catch (InterruptedException ie) {
-                    //ignore
+                try{
+                    mess = CompletableFuture.supplyAsync(() -> {
+                        try {
+                            pw.print("RUOK\n");
+                            pw.flush();
+                            return br.readLine();
+                                    
+                        } catch (Exception e) {
+                            System.out.println("connexion interupted with diffuser");
+                            return null;
+                        }
+                    }).get(1, TimeUnit.SECONDS);
                 }
+                catch(TimeoutException te){
+                    pw.flush();
+                    System.out.println("time out diffuser released");
+                    return;
+                }
+            
+            if (mess == null || !mess.equals("IMOK"))
+                return;
+            Thread.sleep(5000);
+                
             }
         } catch (Exception e) {
             System.out.println("areUalive error in Service_Gestionnaire");
@@ -113,23 +111,20 @@ public class Service_Gestionnaire implements Runnable {
     }
 
     public void sendRegister() {
-        pw.print("LINB " + String.format("%02d", register.size()) + "\n");
-        pw.flush();
-        for (int i = 0; i < register.size(); i++) {
-            // synchronized(register.get(i)) {
-            synchronized(register) {
+        synchronized (register){
+            pw.print("LINB " + String.format("%02d", register.size()) + "\n");
+            pw.flush(); 
+            for (int i = 0; i < register.size(); i++) {
                 pw.print("ITEM " + register.get(i).toString() + "\n");
                 pw.flush();
             }
         }
-        return;
     }
 
 
     public void gest() {
         try {
-            String message;
-            while ((message = br.readLine()) == null);
+            String message = br.readLine();
             System.out.println(message);
             if (message.startsWith("REGI "))
                 Regi(message);
@@ -141,7 +136,6 @@ public class Service_Gestionnaire implements Runnable {
             e.printStackTrace();
         }
     }
-
 
     public void run() {
         try {

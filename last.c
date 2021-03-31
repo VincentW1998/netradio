@@ -18,13 +18,13 @@ char * type_last(char * request) {
 
 /* par of client code for LAST request */
 int recv_for_last(int descr) {
-    char buff[162];
+    char buff[100];
     int size_rec = -1;
     while (strcmp(buff, "ENDM") != 0 && size_rec != 0) {
-        size_rec = recv(descr, buff, 161 * sizeof(char), 0);
+        size_rec = recv(descr, buff, 99 * sizeof(char), 0);
         buff[size_rec] = '\0';
         printf("%s\n", buff);
     }
-    // printf("%s\n", buff);
+    printf("%s\n", buff);
     return 0;
 }

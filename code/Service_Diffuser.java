@@ -6,7 +6,7 @@ public class Service_Diffuser implements Runnable{
     Socket client;
     BufferedReader br;
     PrintWriter pw;
-    static LinkedList<Message> msgs = new LinkedList<Message> ();
+    LinkedList<Message> msgs = new LinkedList<Message> ();
 
     public Service_Diffuser(Socket c){
         try{
@@ -15,7 +15,7 @@ public class Service_Diffuser implements Runnable{
             pw = new PrintWriter(new OutputStreamWriter(c.getOutputStream()));
         }
         catch(Exception e){
-
+            e.printStackTrace();
         }    
     }
 
@@ -60,8 +60,7 @@ public class Service_Diffuser implements Runnable{
 
     public void diff(){
         try{
-            String message;
-            while((message = br.readLine())==null);
+            String message = br.readLine();
             String str [] = message.split(" ",3);
             switch(str[0]){
                 case "MESS":
@@ -74,9 +73,7 @@ public class Service_Diffuser implements Runnable{
 
                 default:
                     return;
-
             }
-
         }
         catch(Exception e){
             System.out.println("error in diff");
@@ -92,7 +89,8 @@ public class Service_Diffuser implements Runnable{
             client.close();
         }
         catch(Exception e){
-
+            System.out.println("error in run : Service_Diffuser.java");
+            e.printStackTrace();
         }
     }
 }
