@@ -13,7 +13,6 @@ char * type_last(char * request) {
     strcat(tmp, nb_mess);
     strcat(tmp, "\n");
     strcpy(request, tmp);
-    printf("LAST : %s", request);
     return tmp;
 }
 

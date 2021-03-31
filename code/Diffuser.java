@@ -5,6 +5,26 @@ public class Diffuser {
     private String id;
     private InetAddress ip1, ip2;
     private int port1, port2;
+    private Socket gestionnaire;
+    
+    public static String fill_hashtag_or_zero(String str, int len, String symbol) {
+        String tmp = "";
+        int length = str.length();
+        int complete_len = len - length;
+        if (complete_len > 0) {
+            if(symbol.equals("#")) {
+                tmp += str;
+            }
+            for(int i = 0; i < complete_len; i++) {
+                tmp += symbol;
+            }
+            if(symbol.equals("0")) {
+                tmp += str;
+            }
+            return tmp;
+        }
+        return str; 
+    }
 
     public Diffuser(String identifiant, InetAddress ipAdress1, int p1, InetAddress ipAdress2, int p2) {
         id = identifiant;
@@ -52,19 +72,37 @@ public class Diffuser {
         }
     }
 
+    public static int portLeft(int p) {
+        try{
+            ServerSocket server = new ServerSocket(p);
+            server.close();
+            return p;
+        } catch (IOException e) {
+            if (p == 1024){
+                return portLeft(9998);
+            }
+            return portLeft(p - 1);
+        }
+    } 
+
     public static void main(String [] args){
         try{
-            assert args.length != 2;
+            if (args.length < 2) {
+                System.out.println("need id (8 char max) and handler port (4 char max)\n");
+                System.exit(1);
+            }
             int p = Integer.parseInt(args[1]);
-            ServerSocket reception = connectToAvailablePort(9998); 
-            Socket connexionToGestionnaire = new Socket("localhost", p);
-            BufferedReader br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
-            PrintWriter pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
-            Diffuser d = new Diffuser(args[0], reception.getInetAddress(), p,  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
-            d.getRegistered(br, pw); //Diffuser registration
-            ImAlive ia = new ImAlive(br, pw);
-            Thread imAliveCheck = new Thread(ia);
-            imAliveCheck.start();
+            ServerSocket server = connectToAvailablePort(9998); //port reception
+            Socket diff_gest = new Socket("localhost", p); // port gestionnaire
+            String id_diffuseur = fill_hashtag_or_zero(args[0], 8, "#");
+            int portMultiDiff = portLeft(9998);
+
+
+            Diffuser d = new Diffuser(id_diffuseur, InetAddress.getByName("225.1.2.4"), portMultiDiff,  server.getInetAddress(), server.getLocalPort()); // not ok broadcast ip and port needs to be changed
+            d.getRegistered(diff_gest);
+            // ImAlive ia = new ImAlive(diff_gest);
+            // Thread imAliveCheck = new Thread(ia);
+            // imAliveCheck.start();
             while(true){
                 Socket client = reception.accept();
                 Service_Diffuser SD = new Service_Diffuser(client);
@@ -74,7 +112,7 @@ public class Diffuser {
             }
         }
         catch(Exception e){
-
+            e.printStackTrace();
         }
     }
 }
