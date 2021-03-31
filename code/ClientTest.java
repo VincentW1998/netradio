@@ -3,10 +3,12 @@ import java.io.*;
 
 public class ClientTest implements Runnable{
     Socket client;
-    int id;
-    public ClientTest(Socket c, int i){
+    String id;
+    String msg;
+    public ClientTest(Socket c, String i,String mess){
         client = c;
         id = i;
+        msg = String.format("%1$-" + 140 + "s", mess).replace(' ', '#');
     }
 
     public void run(){
@@ -15,8 +17,9 @@ public class ClientTest implements Runnable{
                 // Socket client=new Socket("localhost",p);
                 BufferedReader br=new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter pw=new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
-                pw.print("REGI "+String.format("%08d",id) + " 127.000.000.001 1340 127.000.000.001 1340");
+                // pw.print("REGI "+String.format("%08d",id) + " 127.000.000.001 1340 127.000.000.001 1340");
                 // Thread.sleep(60000);
+                pw.print("MESS "+id+" "+msg);
                 pw.flush();
                 pw.close();
                 br.close();
