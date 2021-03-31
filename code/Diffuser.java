@@ -42,9 +42,9 @@ public class Diffuser {
             if(message.equals("REOK"))
                 return;
             getRegistered(gestionnaire);
-            message = br.readLine();
-            System.out.println(message);
-            System.out.println("finished");
+            // message = br.readLine();
+            // System.out.println(message);
+            // System.out.println("finished");
         }
         catch(Exception e){
             System.out.println("registration error");
@@ -69,11 +69,11 @@ public class Diffuser {
             int p = Integer.parseInt(args[1]);
             ServerSocket server = connectToAvailablePort(9998);
             Socket diff_gest = new Socket("localhost", p);
-            Diffuser d = new Diffuser(args[0], server.getInetAddress(), p,  server.getInetAddress(), server.getLocalPort());
+            Diffuser d = new Diffuser(args[0], server.getInetAddress(), p,  server.getInetAddress(), server.getLocalPort()); // not ok broadcast ip and port needs to be changed
             d.getRegistered(diff_gest);
-            // ImAlive ia = new ImAlive(diff_gest);
-            // Thread imAliveCheck = new Thread(ia);
-            // imAliveCheck.start();
+            ImAlive ia = new ImAlive(diff_gest);
+            Thread imAliveCheck = new Thread(ia);
+            imAliveCheck.start();
             while(true){
                 Socket client = server.accept();
                 Service_Diffuser SD = new Service_Diffuser(client);
