@@ -5,7 +5,6 @@ public class Diffuser {
     private String id;
     private InetAddress ip1, ip2;
     private int port1, port2;
-    private Socket gestionnaire;
     
     public static String fill_hashtag_or_zero(String str, int len, String symbol) {
         String tmp = "";
@@ -63,8 +62,8 @@ public class Diffuser {
 
     public static ServerSocket connectToAvailablePort(int p) {
         try {
-            ServerSocket server = new ServerSocket(p);
-            return server;
+            ServerSocket reception = new ServerSocket(p);
+            return reception;
         } catch (IOException e) {
             if (p == 1024)
                 return connectToAvailablePort(9998);
@@ -74,8 +73,8 @@ public class Diffuser {
 
     public static int portLeft(int p) {
         try{
-            ServerSocket server = new ServerSocket(p);
-            server.close();
+            ServerSocket reception = new ServerSocket(p);
+            reception.close();
             return p;
         } catch (IOException e) {
             if (p == 1024){
@@ -92,17 +91,19 @@ public class Diffuser {
                 System.exit(1);
             }
             int p = Integer.parseInt(args[1]);
-            ServerSocket server = connectToAvailablePort(9998); //port reception
-            Socket diff_gest = new Socket("localhost", p); // port gestionnaire
+            ServerSocket reception = connectToAvailablePort(9998); //port reception
+            Socket connexionToGestionnaire =  new Socket("localhost", p); // port gestionnaire
             String id_diffuseur = fill_hashtag_or_zero(args[0], 8, "#");
             int portMultiDiff = portLeft(9998);
+            BufferedReader br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
+            PrintWriter pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
 
 
-            Diffuser d = new Diffuser(id_diffuseur, InetAddress.getByName("225.1.2.4"), portMultiDiff,  server.getInetAddress(), server.getLocalPort()); // not ok broadcast ip and port needs to be changed
-            d.getRegistered(diff_gest);
-            // ImAlive ia = new ImAlive(diff_gest);
-            // Thread imAliveCheck = new Thread(ia);
-            // imAliveCheck.start();
+            Diffuser d = new Diffuser(id_diffuseur, InetAddress.getByName("225.1.2.4"), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
+            d.getRegistered(br, pw); //Diffuser registration
+            ImAlive ia = new ImAlive(br, pw);
+            Thread imAliveCheck = new Thread(ia);
+            imAliveCheck.start();
             while(true){
                 Socket client = reception.accept();
                 Service_Diffuser SD = new Service_Diffuser(client);
