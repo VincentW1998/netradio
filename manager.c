@@ -44,6 +44,9 @@ int which_ip_id_message(char * str, char * phrase, int max_length) {
         write(1, phrase, strlen(phrase));
         n = read(0, str, BUFFSIZE);
         str[n-1] = '\0';
+    }//change 
+    for(int i = strlen(str)-1 ; i<139 ; i++){
+        strcat(str,"#");
     }
     return 0;
 }

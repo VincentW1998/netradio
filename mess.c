@@ -15,7 +15,7 @@ char * type_mess(char * request, char * id) {
     memset(message, '\0', sizeof(char) * MESSSIZE);
     which_ip_id_message(message, "message : ", MESSSIZE);
     strcat(tmp, message);
-    strcat(tmp, "\n");
+    strcat(tmp, "\r\n");
     strcpy(request, tmp);
 
     free(tmp);

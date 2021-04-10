@@ -21,10 +21,10 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
 
     struct addrinfo * first_info;
     int v = getaddrinfo(ip, NULL, NULL, & first_info);
-    if (v != 0) {
-        printf("Erreur avec addrinfo\n");
-        exit(-1);
-    }
+    // if (v != 0) {
+    //     printf("Erreur avec addrinfo\n");
+    //     exit(-1);
+    // }
 
     struct addrinfo * current_info = first_info;
     int done = 0;
@@ -36,10 +36,10 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
         }
         current_info = current_info -> ai_next;
     }
-    if (done == 0) {
-        printf("localhost pas trouvee");
-        exit(-1);
-    }
+    // if (done == 0) {
+    //     printf("localhost pas trouvee");
+    //     exit(-1);
+    // }
 
     int descr = socket(PF_INET, SOCK_STREAM, 0);
     int r = connect(descr, (struct sockaddr * ) & adress_sock, sizeof(struct sockaddr_in));
