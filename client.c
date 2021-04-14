@@ -19,8 +19,8 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
     adress_sock.sin_family = AF_INET;
     adress_sock.sin_port = htons(port);
 
-    struct addrinfo * first_info;
-    int v = getaddrinfo(ip, NULL, NULL, & first_info);
+    struct addrinfo * first_info = malloc(sizeof(struct addrinfo));
+    int v = getaddrinfo(strtok(ip,"#"), NULL, NULL, &first_info);
     if (v != 0) {
         printf("Erreur avec addrinfo\n");
         exit(-1);
@@ -43,7 +43,6 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
 
     int descr = socket(PF_INET, SOCK_STREAM, 0);
     int r = connect(descr, (struct sockaddr * ) & adress_sock, sizeof(struct sockaddr_in));
-
     if (r != -1) {
         send(descr, request, strlen(request), 0);
         switch (cmd) {
@@ -155,6 +154,7 @@ int main(int argc, char ** argv) {
             else if (!strcmp(line, "MESS\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
+                which_ip_id_message(ip, "ip adress : ", IPSIZE);
                 type_mess(str_mess, id_client);
                 connexion_tcp(port, str_mess, ip, 2);
             }

@@ -61,6 +61,7 @@ public class Service_Diffuser implements Runnable{
     public void diff(){
         try{
             String message = br.readLine();
+            System.out.println(message);
             String str [] = message.split(" ",3);
             switch(str[0]){
                 case "MESS":
