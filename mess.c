@@ -4,10 +4,7 @@
 /* ask ip, id, message for [MESS id message] */
 char * type_mess(char * request, char * id) {
     memset(request, '\0', sizeof(char) * 156);
-    char * ip = malloc(sizeof(char) * IPSIZE);
-    memset(ip, '\0', sizeof(char) * IPSIZE);
-    which_ip_id_message(ip, "ip adress : ", IPSIZE);
-    char * tmp = malloc(sizeof(char) * 156);
+    char * tmp = malloc(sizeof(char) * 156 + 1);
     strcat(tmp, "MESS ");
     strcat(tmp, id);
     strcat(tmp, " ");
@@ -17,10 +14,8 @@ char * type_mess(char * request, char * id) {
     strcat(tmp, message);
     strcat(tmp, "\r\n");
     strcpy(request, tmp);
-
     free(tmp);
-    free(ip);
-    free(id);
+    // free(id); // malloc error
     free(message);
     printf("msg : %s\n", request);
     return request;

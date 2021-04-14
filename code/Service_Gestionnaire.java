@@ -77,7 +77,7 @@ public class Service_Gestionnaire implements Runnable {
                 try{
                     mess = CompletableFuture.supplyAsync(() -> {
                         try {
-                            System.out.println("send !");
+                            // System.out.println("send !");
                             pw.print("RUOK\n");
                             pw.flush();
                             return br.readLine();
@@ -96,7 +96,7 @@ public class Service_Gestionnaire implements Runnable {
             
             if (mess == null || !mess.equals("IMOK"))
                 return;
-            System.out.print("received !\n");
+            // System.out.print("received !\n");
             Thread.sleep(5000);
                 
             }

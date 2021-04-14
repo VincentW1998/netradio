@@ -19,7 +19,9 @@ public class ClientTest implements Runnable{
                 PrintWriter pw=new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
                 // pw.print("REGI "+String.format("%08d",id) + " 127.000.000.001 1340 127.000.000.001 1340");
                 // Thread.sleep(60000);
-                pw.print("MESS "+id+" "+msg+"\r\n");
+                String message = "MESS "+id+" "+msg+"\r\n";
+                System.out.println(message.length());
+                pw.print(message);
                 pw.flush();
                 System.out.println(br.readLine());
                 pw.close();
