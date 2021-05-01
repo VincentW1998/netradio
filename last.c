@@ -25,6 +25,5 @@ int recv_for_last(int descr) {
         buff[size_rec] = '\0';
         printf("%s\n", buff);
     }
-    printf("%s\n", buff);
     return 0;
 }
