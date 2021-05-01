@@ -11,11 +11,12 @@ char * type_mess(char * request, char * id) {
     char * message = malloc(sizeof(char) * MESSSIZE);
     memset(message, '\0', sizeof(char) * MESSSIZE);
     which_ip_id_message(message, "message : ", MESSSIZE);
+    message = fill_hashtag_or_zero(message, MESSSIZE, "#");
+    printf("message : %s\n", message);
     strcat(tmp, message);
     strcat(tmp, "\r\n");
     strcpy(request, tmp);
     free(tmp);
-    // free(id); // malloc error
     free(message);
     printf("msg : %s\n", request);
     return request;

@@ -6,7 +6,7 @@ public class Service_Diffuser implements Runnable{
     Socket client;
     BufferedReader br;
     PrintWriter pw;
-    LinkedList<Message> msgs = new LinkedList<Message> ();
+    static LinkedList<Message> msgs = new LinkedList<Message> ();
 
     public Service_Diffuser(Socket c){
         try{

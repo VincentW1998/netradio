@@ -147,7 +147,7 @@ int main(int argc, char ** argv) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
                 which_ip_id_message(ip, "ip adress : ", IPSIZE);
-                connexion_tcp(port, "LIST\n", ip, 0);
+                connexion_tcp(port, "LIST\r\n", ip, 0);
 
             }
 

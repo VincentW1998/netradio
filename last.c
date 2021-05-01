@@ -11,7 +11,7 @@ char * type_last(char * request) {
     memset(tmp, '\0', sizeof(char) * 10);
     strcat(tmp, "LAST ");
     strcat(tmp, nb_mess);
-    strcat(tmp, "\n");
+    strcat(tmp, "\r\n");
     strcpy(request, tmp);
     return tmp;
 }
