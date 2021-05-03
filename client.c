@@ -96,6 +96,7 @@ int connexion_udp(int port, char * ip) {
         tampon[rec]='\0';
         puts(tampon);
     }
+    signal(SIGINT, SIG_DFL);
     close(sock);
     return 0;
 }
