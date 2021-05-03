@@ -11,4 +11,11 @@ public class Message {
         return id + " " + data;
     }
 
+    public Message clone(){
+        return new Message(id, data);
+    }
+
+    public String getId(){
+        return id;
+    }
 }
