@@ -4,13 +4,15 @@ import java.util.*;
 
 public class Service_Diffuser implements Runnable{
     Socket client;
+    Service_multidiff sm;
     BufferedReader br;
     PrintWriter pw;
     static LinkedList<Message> msgs = new LinkedList<Message> ();
 
-    public Service_Diffuser(Socket c){
+    public Service_Diffuser(Socket c, Service_multidiff servM){
         try{
             client = c;
+            sm = servM;
             br = new BufferedReader(new InputStreamReader(c.getInputStream()));
             pw = new PrintWriter(new OutputStreamWriter(c.getOutputStream()));
         }
@@ -25,9 +27,13 @@ public class Service_Diffuser implements Runnable{
             return;
         }
         synchronized(msgs){
-            if(msgs.size()>=99)
-                msgs.removeFirst();      
-            msgs.add(new Message(request[1], request[2]));
+            if(msgs.size()>=99){
+                sm.remove(msgs.getFirst());
+                msgs.removeFirst();
+            }
+            Message msg = new Message(request[1], request[2]);     
+            msgs.add(msg);
+            sm.add(msg);
         }
         pw.print("ACKM\n");
         pw.flush();

@@ -97,16 +97,21 @@ public class Diffuser {
             int portMultiDiff = portLeft(9998);
             BufferedReader br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
+            // Diffuser d = new Diffuser(id_diffuseur, InetAddress.getByName("225.1.2.4"), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
 
+            Service_multidiff sm = new Service_multidiff();
+            Thread tsm = new Thread(sm);
+            tsm.start();
+            Thread.sleep(1000);
+            Diffuser d = new Diffuser(id_diffuseur, sm.ia.getAddress(), sm.ia.getPort(),  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
 
-            Diffuser d = new Diffuser(id_diffuseur, InetAddress.getByName("225.1.2.4"), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
             d.getRegistered(br, pw); //Diffuser registration
             ImAlive ia = new ImAlive(br, pw);
             Thread imAliveCheck = new Thread(ia);
             imAliveCheck.start();
             while(true){
                 Socket client = reception.accept();
-                Service_Diffuser SD = new Service_Diffuser(client);
+                Service_Diffuser SD = new Service_Diffuser(client, sm);
                 System.out.println("New connection detected");
                 Thread t = new Thread(SD);
                 t.start();
