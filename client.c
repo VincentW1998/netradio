@@ -58,6 +58,10 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
         }
         close(descr);
     }
+    else {
+        puts("Error wrong ip or port");
+        close(descr);
+    }
     return 0;
 }
 
@@ -87,10 +91,10 @@ int connexion_udp(int port, char * ip) {
     char tampon[100];
     signal(SIGINT, &sig_handler); // catch CTR+C signal
     g_running = 1;
-    while(g_running) {// CTR+C break the loop
+    while(g_running) {
         int rec=recv(sock,tampon,100,0);
         tampon[rec]='\0';
-        printf("Message recu : %s\n",tampon);
+        puts(tampon);
     }
     close(sock);
     return 0;
@@ -163,7 +167,7 @@ int main(int argc, char ** argv) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
                 which_ip_id_message(ip, "ip adress of multicast: ", IPSIZE);
-                connexion_udp(9998, ip);
+                connexion_udp(port, ip);
             }
             else {
                 print_error("didn't find your cmd, try again\n");
