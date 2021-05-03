@@ -58,6 +58,10 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
         }
         close(descr);
     }
+    else {
+        puts("Error wrong ip or port");
+        close(descr);
+    }
     return 0;
 }
 
@@ -87,7 +91,6 @@ int connexion_udp(int port, char * ip) {
     char tampon[100];
     signal(SIGINT, &sig_handler); // catch CTR+C signal
     g_running = 1;
-    // for (int i = 0; i < 5; i ++) {// CTR+C break the loop
     while(g_running) {
         int rec=recv(sock,tampon,100,0);
         tampon[rec]='\0';
