@@ -6,9 +6,10 @@ public class Service_multidiff implements Runnable{
     InetSocketAddress ia;
     static LinkedList <Message> msgs = new LinkedList <Message> ();
 
-    public Service_multidiff(){
+    public Service_multidiff(InetSocketAddress inetSock){
         try{
             dso = new DatagramSocket();
+            ia = inetSock;
         }
         catch(Exception e){
             e.printStackTrace();
@@ -47,30 +48,8 @@ public class Service_multidiff implements Runnable{
             e.printStackTrace();
         }
     } 
-    public static String addressChecker (int addr [], int port){
-        try{
-            String iAddress = String.valueOf(addr[0]) + "." + String.valueOf(addr[1]) + "." + String.valueOf(addr[2]) + "." + String.valueOf(addr[3]);
-            InetSocketAddress test = new InetSocketAddress(iAddress, port);        
-            return iAddress;
-        }
-        catch(Exception e){
-            if(addr[3] < 999) addr[3] ++;
-              else if(addr[2] < 999) addr[2] ++;
-                   else if(addr[1] < 999) addr[1]++;
-                      else if(addr[0] < 239) addr[0]++;
-                            else {
-                                int loop [] = {224 ,000, 000, 001};
-                                return addressChecker(loop, port);
-                            }
-            return addressChecker(addr, port);
-        }
-    }
-
+    
     public void run(){
-        int port = Diffuser.portLeft(9998);
-        int addr [] = {224 ,000, 000, 001};
-        String address = addressChecker(addr, port);
-        ia = new InetSocketAddress(address, port);
         broadcast(0);
     }
 }

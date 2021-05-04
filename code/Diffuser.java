@@ -1,4 +1,5 @@
 import java.net.*;
+import java.util.Scanner;
 import java.io.*;
 
 public class Diffuser {
@@ -84,6 +85,22 @@ public class Diffuser {
         }
     } 
 
+    public static String addressChecker(int port){
+        try{
+            Scanner ask = new Scanner(System.in);
+            System.out.print("Enter Multicast IP : ");
+            String res = ask.nextLine();
+            InetAddress address = InetAddress.getByName(res);
+            if(!address.isMulticastAddress())
+                throw new Exception();
+            return res;
+        }
+        catch(Exception e){
+            System.out.println("invalid Multicast IP");
+            return addressChecker(port);
+        }
+    }
+
     public static void main(String [] args){
         try{
             if (args.length < 2) {
@@ -94,16 +111,17 @@ public class Diffuser {
             ServerSocket reception = connectToAvailablePort(9998); //port reception
             Socket connexionToGestionnaire =  new Socket("localhost", p); // port gestionnaire
             String id_diffuseur = fill_hashtag_or_zero(args[0], 8, "#");
-            int portMultiDiff = portLeft(9998);
             BufferedReader br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
             // Diffuser d = new Diffuser(id_diffuseur, InetAddress.getByName("225.1.2.4"), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
-
-            Service_multidiff sm = new Service_multidiff();
+            int portMultiDiff = portLeft(9998);
+            String multicastIP = addressChecker(portMultiDiff);
+            InetSocketAddress inetAddress = new InetSocketAddress(multicastIP, portMultiDiff);
+            Service_multidiff sm = new Service_multidiff(inetAddress);
             Thread tsm = new Thread(sm);
             tsm.start();
             Thread.sleep(1000);
-            Diffuser d = new Diffuser(id_diffuseur, sm.ia.getAddress(), sm.ia.getPort(),  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
+            Diffuser d = new Diffuser(id_diffuseur, inetAddress.getAddress(), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
 
             d.getRegistered(br, pw); //Diffuser registration
             ImAlive ia = new ImAlive(br, pw);
