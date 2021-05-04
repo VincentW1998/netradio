@@ -90,6 +90,7 @@ public class Diffuser {
             Scanner ask = new Scanner(System.in);
             System.out.print("Enter Multicast IP (224-239): ");
             String res = ask.nextLine();
+            ask.close();
             InetAddress address = InetAddress.getByName(res);
             if(!address.isMulticastAddress())
                 throw new Exception();
@@ -113,7 +114,7 @@ public class Diffuser {
             String id_diffuseur = fill_hashtag_or_zero(args[0], 8, "#");
             BufferedReader br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
             PrintWriter pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
-            // Diffuser d = new Diffuser(id_diffuseur, InetAddress.getByName("225.1.2.4"), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
+            
             int portMultiDiff = portLeft(9998);
             String multicastIP = addressChecker(portMultiDiff);
             InetSocketAddress inetAddress = new InetSocketAddress(multicastIP, portMultiDiff);
@@ -121,7 +122,7 @@ public class Diffuser {
             Thread tsm = new Thread(sm);
             tsm.start();
             Thread.sleep(1000);
-            Diffuser d = new Diffuser(id_diffuseur, inetAddress.getAddress(), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort()); // not ok broadcast ip and port needs to be changed
+            Diffuser d = new Diffuser(id_diffuseur, inetAddress.getAddress(), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort()); 
 
             d.getRegistered(br, pw); //Diffuser registration
             ImAlive ia = new ImAlive(br, pw);
@@ -134,6 +135,7 @@ public class Diffuser {
                 Thread t = new Thread(SD);
                 t.start();
             }
+            
         }
         catch(Exception e){
             e.printStackTrace();
