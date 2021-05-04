@@ -88,7 +88,7 @@ public class Diffuser {
     public static String addressChecker(int port){
         try{
             Scanner ask = new Scanner(System.in);
-            System.out.print("Enter Multicast IP : ");
+            System.out.print("Enter Multicast IP (224-239): ");
             String res = ask.nextLine();
             InetAddress address = InetAddress.getByName(res);
             if(!address.isMulticastAddress())
