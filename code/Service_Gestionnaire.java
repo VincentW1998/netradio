@@ -23,6 +23,20 @@ public class Service_Gestionnaire implements Runnable {
         }
     }
 
+     public static boolean isUnique( String id, InetAddress MulticastIp){
+        for (int i = 0 ; i < register.size(); i++){
+            if( MulticastIp.equals( register.get(i).getIp1())){
+                System.out.println("MulticastAddress is already used");
+                return false;
+            }
+            if(id.equals( register.get(i).getId())){
+                System.out.println("ID is already used");
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean isGoodRegi(String mess[]) { // check if all arguments in REGI message is correct
         try {
             if (mess.length != 6 || mess[1].length() != 8 || mess[2].length() != 15 || mess[3].length() != 4 || mess[4].length() != 15 || mess[5].length() != 4){
@@ -30,11 +44,11 @@ public class Service_Gestionnaire implements Runnable {
                 return false;
             }
 
-            InetAddress.getByName(mess[2]); // will return an UnkwonHostException if the ip is invalid
-            InetAddress.getByName(mess[4]);
+            InetAddress IP1 = InetAddress.getByName(mess[2]); // will return an UnkwonHostException if the ip is invalid
+            InetAddress IP2 = InetAddress.getByName(mess[4]);
             int port1 = Integer.parseInt(mess[3]);
             int port2 = Integer.parseInt(mess[5]);
-            return port1 < 9999 && port1 >= 1024 && port2 < 9999 && port2 >= 1024;
+            return isUnique(mess[1], IP1) && port1 < 9999 && port1 >= 1024 && port2 < 9999 && port2 >= 1024;
         } catch (UnknownHostException ue) {
             System.out.println("unknownHostException");
             return false;
@@ -53,7 +67,7 @@ public class Service_Gestionnaire implements Runnable {
                 return;
             }
             currDiff = new Diffuser(
-                splitRegi[1] ,
+                splitRegi[1],
                 InetAddress.getByName(splitRegi[2]),
                 Integer.parseInt(splitRegi[3]),
                 InetAddress.getByName(splitRegi[4]),
@@ -77,7 +91,6 @@ public class Service_Gestionnaire implements Runnable {
                 try{
                     mess = CompletableFuture.supplyAsync(() -> {
                         try {
-                            // System.out.println("send !");
                             pw.print("RUOK\n");
                             pw.flush();
                             return br.readLine();
@@ -96,7 +109,6 @@ public class Service_Gestionnaire implements Runnable {
             
             if (mess == null || !mess.equals("IMOK"))
                 return;
-            // System.out.print("received !\n");
             Thread.sleep(5000);
                 
             }
@@ -139,8 +151,6 @@ public class Service_Gestionnaire implements Runnable {
                 client_handler(message);
 
         } catch (Exception e) {
-            System.out.println("issue in gest() : Service_Gestionnaire");
-            e.printStackTrace();
         }
     }
 
