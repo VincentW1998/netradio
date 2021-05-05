@@ -77,7 +77,6 @@ public class Service_Gestionnaire implements Runnable {
                 try{
                     mess = CompletableFuture.supplyAsync(() -> {
                         try {
-                            // System.out.println("send !");
                             pw.print("RUOK\n");
                             pw.flush();
                             return br.readLine();
@@ -106,10 +105,31 @@ public class Service_Gestionnaire implements Runnable {
         }
     }
 
+    public void write_file() {
+        
+        try {
+            String nameFile = br.readLine();
+            String contenu;
+            BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + nameFile));
+            while((contenu = br.readLine()) != null) {
+                writer.write(contenu + "\n");
+            }
+            writer.close();
+            pw.print("File receive by register !\n");
+            pw.flush();
+          } catch (IOException e) {
+            System.out.println("An error occurred.");
+        }
+    }
+
     public void client_handler(String message) {
         try {
-            if (message.equals("LIST"))
+            if (message.equals("LIST")) {
                 sendRegister();
+            }
+            if (message.equals("FILE")) {
+                write_file();
+            }
             return;
         } catch (Exception e) {
             System.out.println("client_handler :  Gestionnaire_clienthandler.java");

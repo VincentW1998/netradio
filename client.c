@@ -10,6 +10,7 @@
 #include "h_files/mess.h"
 #include "h_files/last.h"
 #include "h_files/list.h"
+#include "h_files/file.h"
 #include <signal.h>
 
 
@@ -23,7 +24,7 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
     int v = getaddrinfo(strtok(ip,"#"), NULL, NULL, &first_info);
     if (v != 0) {
         printf("Erreur avec addrinfo\n");
-        exit(-1);
+        return -1;
     }
 
     struct addrinfo * current_info = first_info;
@@ -38,7 +39,7 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
     }
     if (done == 0) {
         printf("localhost pas trouvee");
-        exit(-1);
+        return -1;
     }
 
     int descr = socket(PF_INET, SOCK_STREAM, 0);
@@ -54,6 +55,9 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
             break;
         case 2:
             recv_for_mess(descr);
+            break;
+        case 3:
+            send_file(descr);
             break;
         }
         close(descr);
@@ -173,6 +177,12 @@ int main(int argc, char ** argv) {
                 port = which_port();
                 which_ip_id_message(ip, "ip adress of multicast: ", IPSIZE);
                 connexion_udp(port, ip);
+            }
+            else if (!strcmp(line, "FILE\n")) {
+                memset(line, '\0', sizeof(char) * BUFFSIZE);
+                port = which_port();
+                which_ip_id_message(ip, "ip adress of register : ", IPSIZE);
+                connexion_tcp(port, "FILE\r\n", ip, 3);
             }
             else {
                 print_error("didn't find your cmd, try again\n");

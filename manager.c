@@ -62,6 +62,7 @@ int print_error(char * mess) {
 }
 
 int print_menu() {
+    printf("[+] FILE send file to register\n");
     printf("[+] LAST give nb-mess last messages\n");
     printf("[+] LIST give all broadcaster registered by handler\n");
     printf("[+] LISTEN receive message from broadcaster\n");
