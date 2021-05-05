@@ -33,8 +33,8 @@ int send_file(int sock) {
         }
         memset(content, '\0', FILESIZE);
     }
-    // size_rec = recv(sock, tmp, 30 * sizeof(char), 0);
-    // tmp[size_rec] = '\0';
-    // puts(tmp);
+    size_rec = recv(sock, tmp, 30 * sizeof(char), 0);
+    tmp[size_rec] = '\0';
+    puts(tmp);
     return 0;
 }

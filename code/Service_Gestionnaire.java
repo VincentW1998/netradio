@@ -111,12 +111,14 @@ public class Service_Gestionnaire implements Runnable {
             String nameFile = br.readLine();
             String contenu;
             BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + nameFile));
-            while((contenu = br.readLine()) != null) {
+            while(!(contenu = br.readLine()).equals("")) {
                 writer.write(contenu + "\n");
             }
-            writer.close();
-            pw.print("File receive by register !\n");
+
+            System.out.println("file sent");
+            pw.print("File received from register !\n");
             pw.flush();
+            writer.close();
           } catch (IOException e) {
             System.out.println("An error occurred.");
         }
