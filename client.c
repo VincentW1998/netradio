@@ -83,11 +83,17 @@ int connexion_udp(int port, char * ip) {
     address_sock.sin_family=AF_INET;
     address_sock.sin_port=htons(port);
     address_sock.sin_addr.s_addr=htonl(INADDR_ANY);
-    r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
+    if((r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in))) == -1) {
+      printf("Error bind !\n");
+    }
+    //r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
     struct ip_mreq mreq;
     mreq.imr_multiaddr.s_addr=inet_addr(ip);
     mreq.imr_interface.s_addr=htonl(INADDR_ANY);
-    r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
+    if((r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))) == -1) {
+      printf("Error setsockopt !\n");
+    }
+//    r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
     char tampon[100];
     signal(SIGINT, &sig_handler); // catch CTR+C signal
     g_running = 1;
@@ -113,7 +119,6 @@ int main(int argc, char ** argv) {
     /* INTIALISATION VARIABLES */
     int n;
     char line[BUFFSIZE];
-    int nb_arg_line;
     char * arg_line[3]; // argument of line
     memset(arg_line, '\0', 3 * sizeof(arg_line[0]));
     char str_last[10];
@@ -130,7 +135,6 @@ int main(int argc, char ** argv) {
 
     while (1) {
         print_prompt();
-        nb_arg_line = 0;
         memset(line, '\0', sizeof(line));
         if ((n = read(0, line, BUFFSIZE) > 0)) {
             if (!strcmp(line, "QUIT\n")) {
