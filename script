@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd ..
+
+tar cvf projet-reseaux.tar projet-reseaux---netradio
+
+scp ~/projet-reseaux.tar weiv@nivose.informatique.univ-paris-diderot.fr:~/PR6/Projet

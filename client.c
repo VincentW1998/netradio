@@ -83,11 +83,17 @@ int connexion_udp(int port, char * ip) {
     address_sock.sin_family=AF_INET;
     address_sock.sin_port=htons(port);
     address_sock.sin_addr.s_addr=htonl(INADDR_ANY);
-    r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
+    if((r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in))) == -1) {
+      printf("Error bind !\n");
+    }
+    //r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
     struct ip_mreq mreq;
     mreq.imr_multiaddr.s_addr=inet_addr(ip);
     mreq.imr_interface.s_addr=htonl(INADDR_ANY);
-    r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
+    if((r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))) == -1) {
+      printf("Error setsockopt !\n");
+    }
+//    r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
     char tampon[100];
     signal(SIGINT, &sig_handler); // catch CTR+C signal
     g_running = 1;
