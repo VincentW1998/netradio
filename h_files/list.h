@@ -7,6 +7,6 @@
 #include <unistd.h>
 #include <sys/socket.h>
 
-int recv_for_list(int descr);
+int recv_for_list(int descr, int len);
 
 #endif

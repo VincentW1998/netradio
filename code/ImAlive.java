@@ -14,11 +14,9 @@ public class ImAlive implements Runnable{
             String message;
             while(true){
                 message = br.readLine();
-                // System.out.println("received");
                 if(message.equals("RUOK")){
                     pw.print("IMOK\n");
                     pw.flush();
-                    // System.out.println("sent");
                 }
                 else{
                     System.out.println("message not recognized");

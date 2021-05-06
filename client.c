@@ -50,7 +50,7 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
         send(descr, request, strlen(request), 0);
         switch (cmd) {
         case 0:
-            recv_for_list(descr);
+            recv_for_list(descr, 57);
             break;
         case 1:
             recv_for_last(descr);
@@ -60,6 +60,10 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
             break;
         case 3:
             send_file(descr);
+            break;
+        case 4:
+            // recv_for_listfiles(descr);
+            recv_for_list(descr, 27);
             break;
         }
         close(descr);
@@ -166,14 +170,14 @@ int main(int argc, char ** argv) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
                 type_last(str_last);
-                which_ip_id_message(ip, "ip adress : ", IPSIZE);
+                which_ip_id_message(ip, "diffuser's ip adress : ", IPSIZE);
                 connexion_tcp(port, str_last, ip, 1);
             }
 
             else if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
-                which_ip_id_message(ip, "ip adress : ", IPSIZE);
+                which_ip_id_message(ip, "register's ip address : ", IPSIZE);
                 connexion_tcp(port, "LIST\r\n", ip, 0);
 
             }
@@ -181,7 +185,7 @@ int main(int argc, char ** argv) {
             else if (!strcmp(line, "MESS\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
-                which_ip_id_message(ip, "ip adress : ", IPSIZE);
+                which_ip_id_message(ip, "diffuser's ip adress : ", IPSIZE);
                 type_mess(str_mess, id_client);
                 connexion_tcp(port, str_mess, ip, 2);
             }
@@ -195,8 +199,14 @@ int main(int argc, char ** argv) {
             else if (!strcmp(line, "FILE\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
-                which_ip_id_message(ip, "ip adress of register : ", IPSIZE);
+                which_ip_id_message(ip, "register's ip address : ", IPSIZE);
                 connexion_tcp(port, "FILE\r\n", ip, 3);
+            }
+            else if (!strcmp(line, "LISTFILES\n")) {
+                memset(line, '\0', sizeof(char) * BUFFSIZE);
+                port = which_port();
+                which_ip_id_message(ip, "register's ip address : ", IPSIZE);
+                connexion_tcp(port, "LISTFILES\r\n", ip, 4);
             }
             else {
                 print_error("didn't find your cmd, try again\n");

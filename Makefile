@@ -3,7 +3,7 @@ CFLAGS=-Wall -g
 
 all : client
 
-client : client.o manager.o mess.o list.o last.o file.o
+client : client.o manager.o mess.o list.o last.o file.o 
 
 client.o : client.c h_files/manager.h h_files/mess.h
 
