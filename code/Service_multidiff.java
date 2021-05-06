@@ -27,21 +27,23 @@ public class Service_multidiff implements Runnable{
         }
     }
     
-    public void broadcast(int i){
+    public void broadcast(int i, int numMess){
         try{
             int n = -1;
             synchronized(msgs){
                 if(msgs.size()>0){
                     n = i % msgs.size();
                     Message msg = msgs.get(n);
-                    String str = "DIFF " + String.format("%04d", n) + " " + msg.toString() + "\r\n";
+                    String str = "DIFF " + String.format("%04d", numMess) + " " + msg.toString() + "\r\n";
                     byte [] data = str.getBytes();
                     DatagramPacket paquet = new DatagramPacket(data, data.length, ia);
                     dso.send(paquet);
+                    numMess = (numMess+1) % 10000;
+                    n += 1;
                 }
             }
             Thread.sleep(4000);
-            broadcast(n+1);
+            broadcast(n, numMess);
         }
         catch(Exception e){
             System.out.println("Broadcast error");
@@ -50,6 +52,6 @@ public class Service_multidiff implements Runnable{
     } 
     
     public void run(){
-        broadcast(0);
+        broadcast(0, 0);
     }
 }
