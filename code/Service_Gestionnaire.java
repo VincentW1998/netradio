@@ -11,6 +11,7 @@ public class Service_Gestionnaire implements Runnable {
     private BufferedReader br;
     private PrintWriter pw;
     static LinkedList < Diffuser > register = new LinkedList < Diffuser > ();
+    static LinkedList <String> filesReceived = new LinkedList <String> ();
 
     public Service_Gestionnaire(Socket c) {
         client = c;
@@ -108,15 +109,18 @@ public class Service_Gestionnaire implements Runnable {
     public void write_file() {
         
         try {
-            String nameFile = br.readLine();
             String contenu;
-            if ((contenu = br.readLine()).equals("Canceled")) {
+            String nameFile;
+            if((nameFile = br.readLine()).equals("-CANCELED-")) { // read pathfile
+                System.out.println("Sending file canceled by client");
                 return;
-            }
+            }             
+
+            filesReceived.add(nameFile); // add the pathfile to a list
             BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + nameFile));
-            writer.write(contenu + "\n");
 
             while(!(contenu = br.readLine()).equals("-ENDFILE-")) {
+                System.out.println(contenu + "\n");
                 writer.write(contenu + "\n");
             }
             writer.close();
@@ -158,7 +162,7 @@ public class Service_Gestionnaire implements Runnable {
     public void gest() {
         try {
             String message = br.readLine();
-            System.out.println(message);
+            System.out.println("Request " + message);
             if (message.startsWith("REGI "))
                 Regi(message);
             else

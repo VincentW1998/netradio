@@ -10,7 +10,7 @@ int send_file(int sock) {
     FILE * file;
     char name[NAMESIZE];
     char tmp[30];
-    char * cancel = "Canceled\n";
+    char * cancel = "-CANCELED-\n";
     char * end = "-ENDFILE-\n";
     char * askName = "Enter path file : ";
     memset(name, '\0', sizeof(char) * NAMESIZE);
@@ -34,6 +34,7 @@ int send_file(int sock) {
         }
         memset(content, '\0', FILESIZE);
     }
+    sleep(1);
     send(sock, end, sizeof(char) * strlen(end), 0); // send -ENDFILE-
     size_rec = recv(sock, tmp, 30 * sizeof(char), 0); // wait for answer
     tmp[size_rec] = '\0';
