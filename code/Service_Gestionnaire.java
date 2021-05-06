@@ -146,13 +146,11 @@ public class Service_Gestionnaire implements Runnable {
         for (Diffuser diffu : register) {
             try {
                 Socket client = new Socket(diffu.getIp2(), diffu.getPort2());
-                BufferedReader bread = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter pwriter = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
                 pwriter.print("FILEREG\n");
                 pwriter.print(fileName + '\n');
                 pwriter.flush();
                 pwriter.close();
-                bread.close();
                 client.close();
             } catch (Exception e) {
                 System.out.println("Service constructor : Service_Gestionnaire.java");

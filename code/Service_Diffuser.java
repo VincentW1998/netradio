@@ -71,9 +71,9 @@ public class Service_Diffuser implements Runnable{
             String fileName = br.readLine();
             System.out.println("Received this file : " + fileName);
             listFiles.add(fileName);
-            for( String name : listFiles) {
-                System.out.println(name);
-            }
+            // for( String name : listFiles) {
+            //     System.out.println(name);
+            // }
         }
         catch(Exception e) {
             System.out.println("Error readline");
