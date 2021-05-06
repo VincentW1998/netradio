@@ -1,7 +1,9 @@
 #!/bin/bash
 
-cd ..
+git archive $1 | bzip2 > projet-reseaux.tar.bz2
 
-tar cvf projet-reseaux.tar projet-reseaux---netradio
+scp $(pwd)/projet-reseaux.tar.bz2 $2@nivose.informatique.univ-paris-diderot.fr:~/PR6/Projet
 
-scp ~/projet-reseaux.tar weiv@nivose.informatique.univ-paris-diderot.fr:~/PR6/Projet
+rm projet-reseaux.tar.bz2
+
+ssh lulu.ext

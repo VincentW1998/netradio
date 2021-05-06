@@ -11,6 +11,7 @@ public class Service_Gestionnaire implements Runnable {
     private BufferedReader br;
     private PrintWriter pw;
     static LinkedList < Diffuser > register = new LinkedList < Diffuser > ();
+    static LinkedList <String> filesReceived = new LinkedList <String> ();
 
     public Service_Gestionnaire(Socket c) {
         client = c;
@@ -118,10 +119,39 @@ public class Service_Gestionnaire implements Runnable {
         }
     }
 
+    public void write_file() {
+        
+        try {
+            String contenu;
+            String nameFile;
+            if((nameFile = br.readLine()).equals("-CANCELED-")) { // read pathfile
+                System.out.println("Sending file canceled by client");
+                return;
+            }             
+
+            filesReceived.add(nameFile); // add the pathfile to a list
+            BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + nameFile));
+
+            while(!(contenu = br.readLine()).equals("-ENDFILE-")) {
+                writer.write(contenu + "\n");
+            }
+            writer.close();
+            System.out.println("file received !");
+            pw.print("File received from register !\n");
+            pw.flush();
+          } catch (IOException e) {
+            System.out.println("An error occurred.");
+        }
+    }
+
     public void client_handler(String message) {
         try {
-            if (message.equals("LIST"))
+            if (message.equals("LIST")) {
                 sendRegister();
+            }
+            if (message.equals("FILE")) {
+                write_file();
+            }
             return;
         } catch (Exception e) {
             System.out.println("client_handler :  Gestionnaire_clienthandler.java");
@@ -144,7 +174,7 @@ public class Service_Gestionnaire implements Runnable {
     public void gest() {
         try {
             String message = br.readLine();
-            System.out.println(message);
+            System.out.println("Request " + message);
             if (message.startsWith("REGI "))
                 Regi(message);
             else
