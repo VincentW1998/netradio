@@ -24,6 +24,12 @@ public class Diffuser {
     public int getPort1(){
         return port1;
     }
+    public InetAddress getIp2() {
+        return ip2;
+    }
+    public int getPort2() {
+        return port2;
+    }
 
     @Override
     public String toString() {
