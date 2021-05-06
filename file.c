@@ -11,9 +11,10 @@ int send_file(int sock) {
     char name[NAMESIZE];
     char tmp[30];
     char * cancel = "Canceled\n";
-
+    char * end = "-ENDFILE-\n";
     char * askName = "Enter path file : ";
     memset(name, '\0', sizeof(char) * NAMESIZE);
+
     write(1, askName, strlen(askName));
     n = read(0, name, NAMESIZE);
     name[n-1] = '\0';
@@ -24,16 +25,17 @@ int send_file(int sock) {
         return -1;
     }
     strcat(name, "\n");
-    send(sock, name, sizeof(char) * strlen(name), 0);
+    send(sock, name, sizeof(char) * strlen(name), 0); // first send filename
     
-    while(fgets(content, FILESIZE, file) != NULL) {
+    while(fgets(content, FILESIZE, file) != NULL) { // send char by char
         if ((n = send(sock, content, sizeof(char) * strlen(content), 0)) == -1) {
             printf("Error send file\n");
             return -1;
         }
         memset(content, '\0', FILESIZE);
     }
-    size_rec = recv(sock, tmp, 30 * sizeof(char), 0);
+    send(sock, end, sizeof(char) * strlen(end), 0); // send -ENDFILE-
+    size_rec = recv(sock, tmp, 30 * sizeof(char), 0); // wait for answer
     tmp[size_rec] = '\0';
     puts(tmp);
     return 0;

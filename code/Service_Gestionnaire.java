@@ -110,15 +110,19 @@ public class Service_Gestionnaire implements Runnable {
         try {
             String nameFile = br.readLine();
             String contenu;
+            if ((contenu = br.readLine()).equals("Canceled")) {
+                return;
+            }
             BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + nameFile));
-            while(!(contenu = br.readLine()).equals("")) {
+            writer.write(contenu + "\n");
+
+            while(!(contenu = br.readLine()).equals("-ENDFILE-")) {
                 writer.write(contenu + "\n");
             }
-
-            System.out.println("file sent");
+            writer.close();
+            System.out.println("file received !");
             pw.print("File received from register !\n");
             pw.flush();
-            writer.close();
           } catch (IOException e) {
             System.out.println("An error occurred.");
         }
