@@ -70,16 +70,37 @@ public class Service_Diffuser implements Runnable{
         try {
             String fileName = br.readLine();
             System.out.println("Received this file : " + fileName);
+            fileName = Diffuser.fill_hashtag_or_zero(fileName, 25, "#");
+            System.out.println("Name :" + fileName);
             listFiles.add(fileName);
-            // for( String name : listFiles) {
-            //     System.out.println(name);
-            // }
         }
         catch(Exception e) {
             System.out.println("Error readline");
         }
     }
 
+    public void listFiles() {
+        synchronized(listFiles){
+            System.out.println("REQUEST : LISTFILES\r\n");
+            try {
+                pw.write("NBFILES"+String.format("%02d", listFiles.size())+"\n");
+                for(String fileName : listFiles) {
+                    pw.write(fileName + "\n");
+                }
+                pw.flush();
+                System.out.println("done");
+            }
+            catch (Exception e) {
+                System.out.println("Error send listFiles !");
+            }
+        }
+    }
+
+
+
+
+
+    
     public void diff(){
         try{
             String message = br.readLine();
@@ -96,7 +117,9 @@ public class Service_Diffuser implements Runnable{
                 case "FILEREG" :
                     stockFile();
                     break;
-
+                case "LISTFILES":
+                    listFiles();
+                    break;
                 default:
                     return;
             }

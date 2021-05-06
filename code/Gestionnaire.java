@@ -20,7 +20,7 @@ public class Gestionnaire {
             while (true) {
                 Socket client = server.accept();
                 Service_Gestionnaire SG = new Service_Gestionnaire(client);
-                System.out.println("New connection detected");
+                // System.out.println("New connection detected");
                 Thread t = new Thread(SG);
                 t.start();
             }

@@ -56,6 +56,7 @@ public class Service_Gestionnaire implements Runnable {
     }
 
     public void Regi(String message) throws IOException {
+        System.out.println("Request : REGI");
         Diffuser currDiff;
         synchronized (register) {
             String splitRegi[] = message.split(" ");
@@ -66,6 +67,14 @@ public class Service_Gestionnaire implements Runnable {
                 client.close();
                 return;
             }
+
+            //shows the new diffuser info
+            System.out.println("\tid : " + splitRegi[1] +
+                               "\n\tMulticast Address : " + splitRegi[2] +
+                               "\n\tMulticast Port: " + splitRegi[3] +
+                               "\n\tIP address : " + splitRegi[4] +
+                               "\n\tPort : " + splitRegi[5]); 
+                                
             currDiff = new Diffuser(
                 splitRegi[1],
                 InetAddress.getByName(splitRegi[2]),
@@ -77,14 +86,14 @@ public class Service_Gestionnaire implements Runnable {
         }
             pw.print("REOK\n");
             pw.flush();
-            areUAlive();
+            areUAlive(currDiff.getId());
         synchronized (register) {
             register.remove(currDiff);
         }
         
     }
 
-    public void areUAlive() { // check if the diffuser is still active
+    public void areUAlive(String id) { // check if the diffuser is still active
         try {
             String mess;
             while (true) {
@@ -96,7 +105,7 @@ public class Service_Gestionnaire implements Runnable {
                             return br.readLine();
                                     
                         } catch (Exception e) {
-                            System.out.println("connexion interupted with diffuser");
+                            System.out.println("connexion interupted with diffuser " + id);
                             return null;
                         }
                     }).get(1, TimeUnit.SECONDS);
@@ -189,12 +198,15 @@ public class Service_Gestionnaire implements Runnable {
     public void gest() {
         try {
             String message = br.readLine();
-            System.out.println("Request " + message);
-            if (message.startsWith("REGI "))
+            // System.out.println("Request " + message);
+            if (message.startsWith("REGI ")){
+                System.out.println("new Diffuser connexion");
                 Regi(message);
-            else
+            }
+            else{
+                System.out.println("new Client connexion");
                 client_handler(message);
-
+            }
         } catch (Exception e) {
         }
     }
