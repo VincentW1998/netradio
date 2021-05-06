@@ -120,7 +120,6 @@ public class Service_Gestionnaire implements Runnable {
             BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + nameFile));
 
             while(!(contenu = br.readLine()).equals("-ENDFILE-")) {
-                System.out.println(contenu + "\n");
                 writer.write(contenu + "\n");
             }
             writer.close();
