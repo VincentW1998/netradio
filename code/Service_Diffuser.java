@@ -8,6 +8,7 @@ public class Service_Diffuser implements Runnable{
     BufferedReader br;
     PrintWriter pw;
     static LinkedList<Message> msgs = new LinkedList<Message> ();
+    static LinkedList<String> listFiles = new LinkedList<String>();
 
     public Service_Diffuser(Socket c, Service_multidiff servM){
         try{
@@ -64,6 +65,21 @@ public class Service_Diffuser implements Runnable{
         }
     }
 
+    // Stock the path file into list and print this list
+    public void stockFile() {
+        try {
+            String fileName = br.readLine();
+            System.out.println("Received this file : " + fileName);
+            listFiles.add(fileName);
+            // for( String name : listFiles) {
+            //     System.out.println(name);
+            // }
+        }
+        catch(Exception e) {
+            System.out.println("Error readline");
+        }
+    }
+
     public void diff(){
         try{
             String message = br.readLine();
@@ -77,6 +93,9 @@ public class Service_Diffuser implements Runnable{
                 case "LAST":
                     last(str);
                     return;
+                case "FILEREG" :
+                    stockFile();
+                    break;
 
                 default:
                     return;

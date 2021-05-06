@@ -11,7 +11,6 @@ public class Service_Gestionnaire implements Runnable {
     private BufferedReader br;
     private PrintWriter pw;
     static LinkedList < Diffuser > register = new LinkedList < Diffuser > ();
-    static LinkedList <String> filesReceived = new LinkedList <String> ();
 
     public Service_Gestionnaire(Socket c) {
         client = c;
@@ -119,19 +118,16 @@ public class Service_Gestionnaire implements Runnable {
         }
     }
 
+    // receipt file from client and write into directory Fichier/
     public void write_file() {
-        
         try {
             String contenu;
-            String nameFile;
-            if((nameFile = br.readLine()).equals("-CANCELED-")) { // read pathfile
+            String fileName = br.readLine();
+            if(fileName.equals("-CANCELED-")) { // read pathfile
                 System.out.println("Sending file canceled by client");
                 return;
             }             
-
-            filesReceived.add(nameFile); // add the pathfile to a list
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + nameFile));
-
+            BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + fileName));
             while(!(contenu = br.readLine()).equals("-ENDFILE-")) {
                 writer.write(contenu + "\n");
             }
@@ -139,8 +135,27 @@ public class Service_Gestionnaire implements Runnable {
             System.out.println("file received !");
             pw.print("File received from register !\n");
             pw.flush();
+            send_File_Diff(fileName);
           } catch (IOException e) {
             System.out.println("An error occurred.");
+        }
+    }
+
+    // send file to all diffuser connect with this register
+    public void send_File_Diff(String fileName) {
+        for (Diffuser diffu : register) {
+            try {
+                Socket client = new Socket(diffu.getIp2(), diffu.getPort2());
+                PrintWriter pwriter = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
+                pwriter.print("FILEREG\n");
+                pwriter.print(fileName + '\n');
+                pwriter.flush();
+                pwriter.close();
+                client.close();
+            } catch (Exception e) {
+                System.out.println("Service constructor : Service_Gestionnaire.java");
+                e.printStackTrace();
+            } 
         }
     }
 
