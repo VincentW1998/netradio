@@ -10,7 +10,7 @@ int send_file(int sock) {
     FILE * file;
     char name[NAMESIZE];
     char tmp[30];
-    char cancel = "Canceled\n";
+    char * cancel = "Canceled\n";
 
     char * askName = "Enter path file : ";
     memset(name, '\0', sizeof(char) * NAMESIZE);
@@ -26,7 +26,7 @@ int send_file(int sock) {
     strcat(name, "\n");
     send(sock, name, sizeof(char) * strlen(name), 0);
     
-    while((n = fgets(content, FILESIZE, file)) != NULL) {
+    while(fgets(content, FILESIZE, file) != NULL) {
         if ((n = send(sock, content, sizeof(char) * strlen(content), 0)) == -1) {
             printf("Error send file\n");
             return -1;
