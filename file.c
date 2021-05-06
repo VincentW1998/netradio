@@ -34,7 +34,7 @@ int send_file(int sock) {
         }
         memset(content, '\0', FILESIZE);
     }
-    sleep(1);
+    send(sock, "\n", sizeof(char), 0);
     send(sock, end, sizeof(char) * strlen(end), 0); // send -ENDFILE-
     size_rec = recv(sock, tmp, 30 * sizeof(char), 0); // wait for answer
     tmp[size_rec] = '\0';
