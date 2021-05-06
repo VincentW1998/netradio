@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <netinet/in.h>
+#include <poll.h>
+#include <fcntl.h>
 #include "h_files/manager.h"
 #include "h_files/mess.h"
 #include "h_files/last.h"
@@ -78,36 +80,79 @@ void sig_handler(int signum) {
 }
 
 int connexion_udp(int port, char * ip) {
-    int sock=socket(PF_INET,SOCK_DGRAM,0);
-    int ok=1;
-    int r=setsockopt(sock,SOL_SOCKET,SO_REUSEPORT,&ok,sizeof(ok));
-    // salle de TP a la fac !
-    // int r = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &ok, sizeof(ok));
-    struct sockaddr_in address_sock;
-    address_sock.sin_family=AF_INET;
-    address_sock.sin_port=htons(port);
-    address_sock.sin_addr.s_addr=htonl(INADDR_ANY);
-    if((r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in))) == -1) {
-      printf("Error bind !\n");
+//     int sock=socket(PF_INET,SOCK_DGRAM,0);
+//     int ok=1;
+//     int r=setsockopt(sock,SOL_SOCKET,SO_REUSEPORT,&ok,sizeof(ok));
+//     // salle de TP a la fac !
+//     // int r = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &ok, sizeof(ok));
+//     struct sockaddr_in address_sock;
+//     address_sock.sin_family=AF_INET;
+//     address_sock.sin_port=htons(port);
+//     address_sock.sin_addr.s_addr=htonl(INADDR_ANY);
+//     if((r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in))) == -1) {
+//       printf("Error bind !\n");
+//     }
+//     //r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
+//     struct ip_mreq mreq;
+//     mreq.imr_multiaddr.s_addr=inet_addr(ip);
+//     mreq.imr_interface.s_addr=htonl(INADDR_ANY);
+//     if((r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))) == -1) {
+//       printf("Error setsockopt !\n");
+//     }
+// //    r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
+//     char tampon[100];
+//     signal(SIGINT, &sig_handler); // catch CTR+C signal
+//     g_running = 1;
+//     while(g_running) {
+//         int rec=recv(sock,tampon,100,0);
+//         tampon[rec]='\0';
+//         puts(tampon);
+//     }
+//     signal(SIGINT, SIG_DFL);
+//     close(sock);
+//     return 0;
+    int sock1=socket(PF_INET,SOCK_DGRAM,0);
+    int ok = 1;
+    setsockopt(sock1,SOL_SOCKET,SO_REUSEADDR,&ok,sizeof(ok));
+    struct sockaddr_in address_sock1;
+    address_sock1.sin_family=AF_INET;
+    address_sock1.sin_port=htons(port);
+    // address_sock1.sin_addr.s_addr=htonl(INADDR_ANY);
+    address_sock1.sin_addr.s_addr = inet_addr(ip);
+    int r=bind(sock1,(struct sockaddr *)&address_sock1,sizeof(struct sockaddr_in));
+    if (r == -1) {
+        printf("Error of bind !\n");
+        return -1;
     }
-    //r=bind(sock,(struct sockaddr *)&address_sock,sizeof(struct sockaddr_in));
     struct ip_mreq mreq;
     mreq.imr_multiaddr.s_addr=inet_addr(ip);
     mreq.imr_interface.s_addr=htonl(INADDR_ANY);
-    if((r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))) == -1) {
+    if((r=setsockopt(sock1,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))) == -1) {
       printf("Error setsockopt !\n");
     }
-//    r=setsockopt(sock,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq));
-    char tampon[100];
-    signal(SIGINT, &sig_handler); // catch CTR+C signal
-    g_running = 1;
-    while(g_running) {
-        int rec=recv(sock,tampon,100,0);
-        tampon[rec]='\0';
-        puts(tampon);
+
+    if(r==0){
+        fcntl( sock1, F_SETFL, O_NONBLOCK);
+        struct pollfd p[1];
+        p[0].fd=sock1;
+        p[0].events=POLLIN;
+        char tampon[100];
+        int rec=0;
+        signal(SIGINT, &sig_handler); // catch CTR+C signal
+        g_running = 1;
+        while(g_running){
+            int ret=poll(p,1,0);
+            if(ret>0){
+                if(p[0].revents==POLLIN) {
+                    rec = recv(sock1, tampon, 100,0);
+                    tampon[rec]='\0';
+                    puts(tampon); 
+                }
+            }
+        }
     }
     signal(SIGINT, SIG_DFL);
-    close(sock);
+    close(sock1);
     return 0;
 }
 

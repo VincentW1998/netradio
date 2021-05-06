@@ -4,8 +4,8 @@ import java.io.*;
 
 public class Diffuser {
     private String id;
-    private InetAddress ip1, ip2;
-    private int port1, port2;
+    private InetAddress ip1, ip2; // ip1 : multicast -- ip2 : normal
+    private int port1, port2; // port1 : multicast -- port2 : normal
 
     public Diffuser(String identifiant, InetAddress ipAdress1, int p1, InetAddress ipAdress2, int p2) {
         id = identifiant;

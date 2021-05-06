@@ -144,6 +144,11 @@ public class Service_Gestionnaire implements Runnable {
         }
     }
 
+    // public void send_file_Name(String fileName) {
+    //     for (diffu : register) {
+    //     }
+    // }
+
     public void client_handler(String message) {
         try {
             if (message.equals("LIST")) {
