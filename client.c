@@ -148,9 +148,9 @@ int main(int argc, char ** argv) {
     char ip[16];
     char str_mess[156];
     /* END OF INITIALISATION VARIABLES */
-
+    
+    printf("WELCOME : %s\n", argv[1]);
     char * id_client = fill_hashtag_or_zero(argv[1], 8, "#");
-    printf("identifiant : %s\n", id_client);
     char * begin = "Type HELP : print all commands available !\n";
     write(1, begin, strlen(begin));
 

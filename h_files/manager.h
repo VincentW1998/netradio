@@ -15,6 +15,8 @@
 
 char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol);
 
+char * remove_hashtag(char * str);
+
 int which_ip_id_message(char * str, char * phrase, int max_length);
 
 int print_prompt();

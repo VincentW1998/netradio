@@ -6,5 +6,7 @@ echo '#######################################'
 echo 'make :'
 make
 echo '#######################################'
-echo './client radio'
+echo './client '$1
+echo ''
+
 ./client $1

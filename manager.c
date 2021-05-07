@@ -20,6 +20,18 @@ char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol) {
     return id;
 }
 
+// remove hashtag at the end of string
+char * remove_hashtag(char * str) {
+    int len = strlen(str);
+    char * tmp = malloc(26 * sizeof(char));
+    while(str[len-1] == '#') {
+        len --;
+    }
+    memcpy(tmp, &str[0], len);
+    tmp[len] = '\0';
+    return tmp;
+}
+
 
 /* ask port between 0 and 9999 */
 int which_port() {
@@ -62,12 +74,12 @@ int print_error(char * mess) {
 }
 
 int print_menu() {
-    printf("[+] FILE send file to register\n");
-    printf("[+] LAST give nb-mess last messages\n");
-    printf("[+] LIST give all broadcaster registered by handler\n");
-    printf("[+] LISTEN receive message from broadcaster\n");
-    printf("[+] MESS send a message to a broadcaster\n");
-    printf("[+] HELP show all commands available\n");
+    printf("[+] FILE -> send file to register (Extension)\n");
+    printf("[+] LAST -> give nb-mess last messages\n");
+    printf("[+] LIST -> give all broadcaster registered by handler\n");
+    printf("[+] LISTEN -> receive message from broadcaster\n");
+    printf("[+] MESS -> send a message to a broadcaster\n");
+    printf("[+] HELP -> show all commands available\n");
     printf("[+] QUIT\n");
     return 0;
 }
