@@ -40,20 +40,6 @@ public class Service_Diffuser implements Runnable{
         pw.flush();
     }
 
-    public String addZero(int n) {
-        String num_mess = String.valueOf(n);
-        if (n < 10) {
-            num_mess = "000" + num_mess;
-        }
-        else if (n < 100) {
-            num_mess = "00" + num_mess;
-        }
-        else {
-            num_mess = "0" + num_mess;
-        }
-        return num_mess;
-    }
-
     public void last(String request []){
         try {
             int nbMess = Integer.parseInt(request[1]);
@@ -66,7 +52,8 @@ public class Service_Diffuser implements Runnable{
                 if(nbMess > msgs.size())
                     nbMess = msgs.size();
                 for(int i=0; i<nbMess; i++){
-                    pw.print("OLDM " + addZero(i+1)+" "+msgs.get(i).toString()+"\r\n");
+                    String nb_with_zero = String.format("%04d", i+1);
+                    pw.print("OLDM " + nb_with_zero +" "+msgs.get(i).toString()+"\r\n");
                     pw.flush();
                 }
             }
@@ -85,7 +72,6 @@ public class Service_Diffuser implements Runnable{
             String fileName = br.readLine();
             System.out.println("Received this file : " + fileName);
             fileName = Diffuser.fill_hashtag_or_zero(fileName, 25, "#");
-            System.out.println("Name :" + fileName);
             listFiles.add(fileName);
         }
         catch(Exception e) {

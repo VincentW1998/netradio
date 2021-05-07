@@ -1,5 +1,8 @@
 #include "h_files/manager.h"
 
+char * error_len = "PROBLEM in the received message : length %d not good, 161 attended !\n";
+char * error_ipport = "Error bad ip or bad port !\n";
+
 // Complete by "#" or "0"
 char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol) {
     char * tmp = malloc(sizeof(char) * idOrMess);

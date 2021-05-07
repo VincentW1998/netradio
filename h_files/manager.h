@@ -12,6 +12,10 @@
 #define MESSSIZE 140
 #define IPSIZE 15
 #define SIZENBMESS 3
+#define GOODLEN 161
+
+char * error_len;
+char * error_ipport;
 
 char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol);
 
