@@ -1,9 +1,15 @@
 CC=gcc
 CFLAGS=-Wall -g
 
-all : client
+all : client mytalk
 
 client : client.o manager.o mess.o list.o last.o file.o 
+
+mytalk : mytalk.o mycat.o
+
+mytalk.o : mytalk.c mycat.h
+
+mycat.o : mycat.c mycat.h
 
 client.o : client.c h_files/manager.h h_files/mess.h
 
