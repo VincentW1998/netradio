@@ -83,9 +83,9 @@ public class Service_Diffuser implements Runnable{
         synchronized(listFiles){
             System.out.println("REQUEST : LISTFILES\r\n");
             try {
-                pw.write("NBFILES"+String.format("%02d", listFiles.size())+"\n");
+                pw.write("NBFI "+String.format("%02d", listFiles.size())+"\n");
                 for(String fileName : listFiles) {
-                    pw.write(fileName + "\n");
+                    pw.write(fileName);
                 }
                 pw.flush();
                 System.out.println("done");

@@ -9,4 +9,6 @@
 
 int recv_for_list(int descr, int len);
 
+int recv_listFiles(int descr, int nb, int len);
+
 #endif

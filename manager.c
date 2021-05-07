@@ -78,6 +78,7 @@ int print_menu() {
     printf("[+] LAST -> give nb-mess last messages\n");
     printf("[+] LIST -> give all broadcaster registered by handler\n");
     printf("[+] LISTEN -> receive message from broadcaster\n");
+    printf("[+] LISTFILES -> display all files available\n");
     printf("[+] MESS -> send a message to a broadcaster\n");
     printf("[+] HELP -> show all commands available\n");
     printf("[+] QUIT\n");

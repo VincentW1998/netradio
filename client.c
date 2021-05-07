@@ -63,7 +63,7 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
             break;
         case 4:
             // recv_for_listfiles(descr);
-            recv_for_list(descr, 27);
+            recv_for_list(descr, 26);
             break;
         }
         close(descr);
@@ -205,7 +205,7 @@ int main(int argc, char ** argv) {
             else if (!strcmp(line, "LISTFILES\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
-                which_ip_id_message(ip, "register's ip address : ", IPSIZE);
+                which_ip_id_message(ip, "diffuser's ip adress : ", IPSIZE);
                 connexion_tcp(port, "LISTFILES\r\n", ip, 4);
             }
             else {
