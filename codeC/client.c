@@ -1,138 +1,16 @@
-#include <sys/socket.h>
 #include <unistd.h>
-#include <arpa/inet.h>
-#include <netdb.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <netinet/in.h>
-#include <poll.h>
-#include <fcntl.h>
 #include "h_files/manager.h"
 #include "h_files/mess.h"
 #include "h_files/last.h"
 #include "h_files/list.h"
 #include "h_files/file.h"
+#include "h_files/udp.h"
+#include "h_files/tcp.h"
 #include <signal.h>
 
-
-int connexion_tcp(int port, char * request, char * ip, int cmd) {
-    struct sockaddr_in adress_sock;
-    memset( & adress_sock, 0, sizeof(struct sockaddr_in));
-    adress_sock.sin_family = AF_INET;
-    adress_sock.sin_port = htons(port);
-
-    struct addrinfo * first_info = malloc(sizeof(struct addrinfo));
-    int v = getaddrinfo(strtok(ip,"#"), NULL, NULL, &first_info);
-    if (v != 0) {
-        printf("Erreur avec addrinfo\n");
-        return -1;
-    }
-
-    struct addrinfo * current_info = first_info;
-    int done = 0;
-    while (!done && current_info != NULL) {
-        if (current_info -> ai_family == AF_INET) {
-            struct sockaddr_in * addr_in = (struct sockaddr_in * ) current_info -> ai_addr;
-            adress_sock.sin_addr = addr_in -> sin_addr;
-            done = 1;
-        }
-        current_info = current_info -> ai_next;
-    }
-    if (done == 0) {
-        printf("localhost pas trouvee");
-        return -1;
-    }
-
-    int descr = socket(PF_INET, SOCK_STREAM, 0);
-    int r = connect(descr, (struct sockaddr * ) & adress_sock, sizeof(struct sockaddr_in));
-    if (r != -1) {
-        send(descr, request, strlen(request), 0);
-        switch (cmd) {
-        case 0:
-            recv_for_list(descr, 57);
-            break;
-        case 1:
-            recv_for_last(descr);
-            break;
-        case 2:
-            recv_for_mess(descr);
-            break;
-        case 3:
-            send_file(descr);
-            break;
-        case 4:
-            // recv_for_listfiles(descr);
-            recv_for_list(descr, 26);
-            break;
-        }
-        close(descr);
-    }
-    else {
-        puts(error_ipport);
-        close(descr);
-    }
-    return 0;
-}
-
-sig_atomic_t volatile g_running = 1;
-
-void sig_handler(int signum) {
-    if(signum == SIGINT) {
-        g_running = 0;
-    }
-}
-
-int connexion_udp(int port, char * ip) {
-    int sock1=socket(PF_INET,SOCK_DGRAM,0);
-    int ok = 1;
-    setsockopt(sock1,SOL_SOCKET,SO_REUSEADDR,&ok,sizeof(ok));
-    struct sockaddr_in address_sock1;
-    address_sock1.sin_family=AF_INET;
-    address_sock1.sin_port=htons(port);
-    // address_sock1.sin_addr.s_addr=htonl(INADDR_ANY);
-    address_sock1.sin_addr.s_addr = inet_addr(ip);
-    int r=bind(sock1,(struct sockaddr *)&address_sock1,sizeof(struct sockaddr_in));
-    if (r == -1) {
-        printf("%s", error_ipport);
-        return -1;
-    }
-    struct ip_mreq mreq;
-    mreq.imr_multiaddr.s_addr=inet_addr(ip);
-    mreq.imr_interface.s_addr=htonl(INADDR_ANY);
-    if((r=setsockopt(sock1,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))) == -1) {
-      printf("Error setsockopt !\n");
-    }
-
-    if(r==0){
-        fcntl( sock1, F_SETFL, O_NONBLOCK);
-        struct pollfd p[1];
-        p[0].fd=sock1;
-        p[0].events=POLLIN;
-        char tampon[GOODLEN+1];
-        int rec=0;
-        signal(SIGINT, &sig_handler); // catch CTR+C signal
-        g_running = 1;
-        while(g_running){
-            int ret=poll(p,1,0);
-            if(ret>0){
-                if(p[0].revents==POLLIN) {
-                    rec = recv(sock1, tampon, GOODLEN* sizeof(char),0);
-                    tampon[rec-2]='\0';
-                    if(rec != GOODLEN) {
-                        printf(error_len, rec);
-                        continue;
-                    }
-                    char * str = remove_hashtag(tampon);
-                    printf("%s\n", str);
-                }
-            }
-        }
-    }
-    signal(SIGINT, SIG_DFL);
-    close(sock1);
-    return 0;
-}
 
 int main(int argc, char ** argv) {
     if (argc != 2) {
