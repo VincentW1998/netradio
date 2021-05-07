@@ -19,7 +19,7 @@ public class Message {
         return id;
     }
 
-    public remove_hashtag(String mess) {
+    public String remove_hashtag(String mess) {
         int len = mess.length();
         while(mess.charAt(len-1) == '#') {
             len --;

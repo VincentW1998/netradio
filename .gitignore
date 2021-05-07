@@ -2,4 +2,4 @@
 *.o
 client
 *.class
-code/Fichier/*
+Fichier/*
