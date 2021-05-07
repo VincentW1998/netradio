@@ -36,7 +36,7 @@ public class Service_Diffuser implements Runnable{
             msgs.add(msg);
             sm.add(msg);
         }
-        pw.print("ACKM\n");
+        pw.print("ACKM\r\n");
         pw.flush();
     }
 
