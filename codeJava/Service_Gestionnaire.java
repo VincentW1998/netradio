@@ -131,11 +131,14 @@ public class Service_Gestionnaire implements Runnable {
     public void write_file() {
         try {
             String contenu;
-            String fileName = br.readLine();
-            if(fileName.equals("-CANCELED-")) { // read pathfile
+            String pathFile= br.readLine();
+            if(pathFile.equals("-CANCELED-")) { // read pathfile
                 System.out.println("Sending file canceled by client");
                 return;
             }             
+            String [] token = pathFile.split("/");
+            String fileName = token[token.length - 1];
+
             BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + fileName));
             while(!(contenu = br.readLine()).equals("-ENDFILE-")) {
                 writer.write(contenu + "\n");

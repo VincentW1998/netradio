@@ -63,13 +63,13 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
             break;
         case 4:
             // recv_for_listfiles(descr);
-            recv_for_list(descr, 27);
+            recv_for_list(descr, 26);
             break;
         }
         close(descr);
     }
     else {
-        puts("Error wrong ip or port");
+        puts(error_ipport);
         close(descr);
     }
     return 0;
@@ -94,7 +94,7 @@ int connexion_udp(int port, char * ip) {
     address_sock1.sin_addr.s_addr = inet_addr(ip);
     int r=bind(sock1,(struct sockaddr *)&address_sock1,sizeof(struct sockaddr_in));
     if (r == -1) {
-        printf("Error of bind !\n");
+        printf("%s", error_ipport);
         return -1;
     }
     struct ip_mreq mreq;
@@ -109,7 +109,7 @@ int connexion_udp(int port, char * ip) {
         struct pollfd p[1];
         p[0].fd=sock1;
         p[0].events=POLLIN;
-        char tampon[100];
+        char tampon[GOODLEN+1];
         int rec=0;
         signal(SIGINT, &sig_handler); // catch CTR+C signal
         g_running = 1;
@@ -117,9 +117,14 @@ int connexion_udp(int port, char * ip) {
             int ret=poll(p,1,0);
             if(ret>0){
                 if(p[0].revents==POLLIN) {
-                    rec = recv(sock1, tampon, 100,0);
-                    tampon[rec]='\0';
-                    puts(tampon); 
+                    rec = recv(sock1, tampon, GOODLEN* sizeof(char),0);
+                    tampon[rec-2]='\0';
+                    if(rec != GOODLEN) {
+                        printf(error_len, rec);
+                        continue;
+                    }
+                    char * str = remove_hashtag(tampon);
+                    printf("%s\n", str);
                 }
             }
         }
@@ -205,7 +210,7 @@ int main(int argc, char ** argv) {
             else if (!strcmp(line, "LISTFILES\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
-                which_ip_id_message(ip, "register's ip address : ", IPSIZE);
+                which_ip_id_message(ip, "diffuser's ip adress : ", IPSIZE);
                 connexion_tcp(port, "LISTFILES\r\n", ip, 4);
             }
             else {

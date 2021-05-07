@@ -1,7 +1,7 @@
 #include "h_files/file.h"
 #include "h_files/manager.h"
 #define FILESIZE 1024
-#define NAMESIZE 25
+#define NAMESIZE 100
 
 int send_file(int sock) {
     int n;
@@ -9,7 +9,7 @@ int send_file(int sock) {
     char content[FILESIZE];
     FILE * file;
     char name[NAMESIZE];
-    char tmp[30];
+    char tmp[100];
     char * cancel = "-CANCELED-\n";
     char * end = "-ENDFILE-\n";
     char * askName = "Enter path file : ";

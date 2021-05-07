@@ -18,4 +18,12 @@ public class Message {
     public String getId(){
         return id;
     }
+
+    public String remove_hashtag(String mess) {
+        int len = mess.length();
+        while(mess.charAt(len-1) == '#') {
+            len --;
+        }
+        return mess.substring(0, len);
+    }
 }

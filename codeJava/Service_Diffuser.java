@@ -36,14 +36,14 @@ public class Service_Diffuser implements Runnable{
             msgs.add(msg);
             sm.add(msg);
         }
-        pw.print("ACKM\n");
+        pw.print("ACKM\r\n");
         pw.flush();
     }
 
     public void last(String request []){
         try {
             int nbMess = Integer.parseInt(request[1]);
-            if(request.length != 2 || nbMess > 999 || nbMess < 0){
+            if(request.length != 2 || nbMess > 9999 || nbMess < 0){
                 System.out.println("error in last message composition");
                 return;
             }
@@ -52,11 +52,12 @@ public class Service_Diffuser implements Runnable{
                 if(nbMess > msgs.size())
                     nbMess = msgs.size();
                 for(int i=0; i<nbMess; i++){
-                    pw.print("OLDM"+" "+String.valueOf(i+1)+" "+msgs.get(i).toString()+"\n");
+                    String nb_with_zero = String.format("%04d", i+1);
+                    pw.print("OLDM " + nb_with_zero +" "+msgs.get(i).toString()+"\r\n");
                     pw.flush();
                 }
             }
-            pw.print("ENDM");
+            pw.print("ENDM\r\n");
         }
         catch(Exception e){
             System.out.println("error in last message composition");
@@ -71,7 +72,6 @@ public class Service_Diffuser implements Runnable{
             String fileName = br.readLine();
             System.out.println("Received this file : " + fileName);
             fileName = Diffuser.fill_hashtag_or_zero(fileName, 25, "#");
-            System.out.println("Name :" + fileName);
             listFiles.add(fileName);
         }
         catch(Exception e) {
@@ -83,9 +83,9 @@ public class Service_Diffuser implements Runnable{
         synchronized(listFiles){
             System.out.println("REQUEST : LISTFILES\r\n");
             try {
-                pw.write("NBFILES"+String.format("%02d", listFiles.size())+"\n");
+                pw.write("NBFI "+String.format("%02d", listFiles.size())+"\n");
                 for(String fileName : listFiles) {
-                    pw.write(fileName + "\n");
+                    pw.write(fileName);
                 }
                 pw.flush();
                 System.out.println("done");

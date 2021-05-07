@@ -1,5 +1,8 @@
 #include "h_files/manager.h"
 
+char * error_len = "PROBLEM in the received message : length %d not good, 161 attended !\n";
+char * error_ipport = "Error bad ip or bad port !\n";
+
 // Complete by "#" or "0"
 char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol) {
     char * tmp = malloc(sizeof(char) * idOrMess);
@@ -23,7 +26,7 @@ char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol) {
 // remove hashtag at the end of string
 char * remove_hashtag(char * str) {
     int len = strlen(str);
-    char * tmp = malloc(26 * sizeof(char));
+    char * tmp = malloc(156 * sizeof(char));
     while(str[len-1] == '#') {
         len --;
     }
@@ -78,6 +81,7 @@ int print_menu() {
     printf("[+] LAST -> give nb-mess last messages\n");
     printf("[+] LIST -> give all broadcaster registered by handler\n");
     printf("[+] LISTEN -> receive message from broadcaster\n");
+    printf("[+] LISTFILES -> display all files available\n");
     printf("[+] MESS -> send a message to a broadcaster\n");
     printf("[+] HELP -> show all commands available\n");
     printf("[+] QUIT\n");
