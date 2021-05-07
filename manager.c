@@ -23,7 +23,7 @@ char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol) {
 // remove hashtag at the end of string
 char * remove_hashtag(char * str) {
     int len = strlen(str);
-    char * tmp = malloc(26 * sizeof(char));
+    char * tmp = malloc(156 * sizeof(char));
     while(str[len-1] == '#') {
         len --;
     }

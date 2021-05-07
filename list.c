@@ -30,7 +30,7 @@ int recv_for_list(int descr, int len) {
 
 int recv_listFiles(int descr, int nb, int len) {
     int size_rec;
-    for (int i = 0; i < nb; i++) {
+    for (int i = 1; i <= nb; i++) {
         char * tmp = malloc(sizeof(char) * len);
         size_rec = recv(descr, tmp, (len-1) * sizeof(char), 0);
         tmp[size_rec] = '\0';

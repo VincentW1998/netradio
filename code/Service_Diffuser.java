@@ -70,7 +70,7 @@ public class Service_Diffuser implements Runnable{
                     pw.flush();
                 }
             }
-            pw.print("ENDM");
+            pw.print("ENDM\r\n");
         }
         catch(Exception e){
             System.out.println("error in last message composition");
