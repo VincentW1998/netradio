@@ -77,6 +77,7 @@ int print_error(char * mess) {
 }
 
 int print_menu() {
+    printf("[+] DOWNLOAD -> download file\n");
     printf("[+] FILE -> send file to register (Extension)\n");
     printf("[+] LAST -> give nb-mess last messages\n");
     printf("[+] LIST -> give all broadcaster registered by handler\n");

@@ -16,5 +16,5 @@ sig_atomic_t volatile g_running;
 
 void sig_handler(int signum);
 
-int connexion_udp(int port, char * ip);
+int connexion_udp(int port, char * ip, char * tty);
 #endif

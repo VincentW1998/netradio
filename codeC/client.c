@@ -30,6 +30,7 @@ int main(int argc, char ** argv) {
     int port;
     char ip[16];
     char str_mess[156];
+    char tty[20];
     /* END OF INITIALISATION VARIABLES */
     
     printf("WELCOME : %s\n", argv[1]);
@@ -77,7 +78,9 @@ int main(int argc, char ** argv) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
                 port = which_port();
                 which_ip_id_message(ip, "ip adress of multicast: ", IPSIZE);
-                connexion_udp(port, ip);
+                which_ip_id_message(tty, "tty : ", 20);
+                connexion_udp(port, ip, tty);
+
             }
             else if (!strcmp(line, "FILE\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
@@ -91,11 +94,17 @@ int main(int argc, char ** argv) {
                 which_ip_id_message(ip, "diffuser's ip adress : ", IPSIZE);
                 connexion_tcp(port, "LISTFILES\r\n", ip, 4);
             }
+
+            else if (!strcmp(line, "DOWNLOAD\n")) {
+                memset(line, '\0', sizeof(char) * BUFFSIZE);
+            }
             else {
                 print_error("didn't find your cmd, try again\n");
 
             }
             memset(line, '\0', BUFFSIZE);
+            memset(ip, '\0', sizeof(char) * IPSIZE);
+            memset(tty, '\0', 20);
         }
     }
     return 0;

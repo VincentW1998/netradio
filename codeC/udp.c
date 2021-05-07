@@ -11,7 +11,7 @@ void sig_handler(int signum) {
     }
 }
 
-int connexion_udp(int port, char * ip) {
+int connexion_udp(int port, char * ip, char * tty) {
     int sock1=socket(PF_INET,SOCK_DGRAM,0);
     int ok = 1;
     setsockopt(sock1,SOL_SOCKET,SO_REUSEADDR,&ok,sizeof(ok));
@@ -29,6 +29,7 @@ int connexion_udp(int port, char * ip) {
     mreq.imr_interface.s_addr=htonl(INADDR_ANY);
     if((r=setsockopt(sock1,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))) == -1) {
       printf("Error setsockopt !\n");
+      return -1;
     }
 
     if(r==0){
@@ -40,7 +41,11 @@ int connexion_udp(int port, char * ip) {
         int rec=0;
         signal(SIGINT, &sig_handler); // catch CTR+C signal
         g_running = 1;
-        int fd = open("/dev/ttys002", O_WRONLY);
+        int fd = open(tty, O_WRONLY);
+        if(fd < 0) {
+            printf("wrong tty !\n");
+            return -1;
+        }
         int total_ecrit = 0;
         int copyDup = dup(1);
         dup2(fd, 1);
