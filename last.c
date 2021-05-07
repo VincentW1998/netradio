@@ -20,7 +20,6 @@ char * type_last(char * request) {
 int recv_for_last(int descr) {
     char buff[162];
     int size_rec = GOODLEN;
-    // while (strcmp(buff, "ENDM") != 0 && size_rec != 0) {
     while(1) {
         memset(buff, '\0', sizeof(char) * size_rec);
         size_rec = recv(descr, buff, GOODLEN* sizeof(char), 0);
