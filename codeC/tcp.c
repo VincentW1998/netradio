@@ -53,6 +53,10 @@ int connexion_tcp(int port, char * request, char * ip, int cmd) {
         case 4:
             recv_for_list(descr, 26);
             break;
+        case 5:
+            write_file(descr);
+            break;
+        
         }
         close(descr);
     }

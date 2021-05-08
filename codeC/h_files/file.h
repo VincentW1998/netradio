@@ -6,6 +6,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 
 int send_file(int sock);
+
+int write_file(int sock);
 #endif
