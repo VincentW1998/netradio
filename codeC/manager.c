@@ -66,7 +66,7 @@ int which_ip_id_message(char * str, char * phrase, int max_length) {
 }
 
 int print_prompt() {
-    write(1, "> ", 2);
+    write(1, "\n> ", 3);
     return 0;
 }
 
@@ -77,6 +77,7 @@ int print_error(char * mess) {
 }
 
 int print_menu() {
+    printf("[+] DOWNLOAD -> download file\n");
     printf("[+] FILE -> send file to register (Extension)\n");
     printf("[+] LAST -> give nb-mess last messages\n");
     printf("[+] LIST -> give all broadcaster registered by handler\n");

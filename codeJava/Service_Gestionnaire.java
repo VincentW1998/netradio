@@ -11,6 +11,9 @@ public class Service_Gestionnaire implements Runnable {
     private BufferedReader br;
     private PrintWriter pw;
     static LinkedList < Diffuser > register = new LinkedList < Diffuser > ();
+    static LinkedList <String> listFiles = new LinkedList <String> ();
+
+    
 
     public Service_Gestionnaire(Socket c) {
         client = c;
@@ -138,8 +141,9 @@ public class Service_Gestionnaire implements Runnable {
             }             
             String [] token = pathFile.split("/");
             String fileName = token[token.length - 1];
+            listFiles.add(fileName);
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter("Fichier/" + fileName));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("../Fichier/" + fileName));
             while(!(contenu = br.readLine()).equals("-ENDFILE-")) {
                 writer.write(contenu + "\n");
             }
@@ -171,13 +175,38 @@ public class Service_Gestionnaire implements Runnable {
         }
     }
 
+    public void send_file_client(int idFile) {
+        try {
+            String contenu;
+            String fileName = listFiles.get(idFile-1);
+            String fileNameGood = Diffuser.fill_hashtag_or_zero(fileName, 30, "#");
+            pw.print(fileNameGood);// send filename to client
+
+            BufferedReader reader = new BufferedReader(new FileReader("../Fichier/" + fileName));
+
+            while((contenu = reader.readLine()) != null) {
+                String contenuGood = Diffuser.fill_hashtag_or_zero(contenu, 200, "#");
+                pw.print(contenuGood); // send line by line
+            }
+            pw.flush();
+            reader.close();
+        }
+        catch (Exception e) {
+            System.out.println("Error read file !");
+        }
+    }
+
     public void client_handler(String message) {
         try {
+            String [] dlist;
             if (message.equals("LIST")) {
                 sendRegister();
             }
             if (message.equals("FILE")) {
                 write_file();
+            }
+            if( (dlist = message.split(" "))[0].equals("DOWNLOAD")) {
+                send_file_client(Integer.parseInt(dlist[1]));
             }
             return;
         } catch (Exception e) {
