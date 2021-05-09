@@ -29,7 +29,7 @@ public class Service_multidiff implements Runnable{
     
     public void broadcast(int i, int numMess){
         try{
-            int n = -1;
+            int n = 0;
             synchronized(msgs){
                 if(msgs.size()>0){
                     n = i % msgs.size();

@@ -7,15 +7,17 @@ public class Service_Diffuser implements Runnable{
     Service_multidiff sm;
     BufferedReader br;
     PrintWriter pw;
-    static LinkedList<Message> msgs = new LinkedList<Message> ();
-    static LinkedList<String> listFiles = new LinkedList<String>();
+    LinkedList<Message> msgs = new LinkedList<Message> ();
+    LinkedList<String> listFiles = new LinkedList<String>();
 
-    public Service_Diffuser(Socket c, Service_multidiff servM){
+    public Service_Diffuser(Socket c, Service_multidiff servM, LinkedList<Message> m, LinkedList <String> lf){
         try{
             client = c;
             sm = servM;
             br = new BufferedReader(new InputStreamReader(c.getInputStream()));
             pw = new PrintWriter(new OutputStreamWriter(c.getOutputStream()));
+            msgs = m;
+            listFiles = lf;
         }
         catch(Exception e){
             e.printStackTrace();
@@ -36,7 +38,8 @@ public class Service_Diffuser implements Runnable{
             msgs.add(msg);
             sm.add(msg);
         }
-        pw.print("ACKM\r\n");
+        System.out.println("Message received - ACKM sent");
+        pw.print("ACKM\n");
         pw.flush();
     }
 
@@ -96,15 +99,9 @@ public class Service_Diffuser implements Runnable{
         }
     }
 
-
-
-
-
-    
     public void diff(){
         try{
             String message = br.readLine();
-            System.out.println(message);
             String str [] = message.split(" ",3);
             switch(str[0]){
                 case "MESS":

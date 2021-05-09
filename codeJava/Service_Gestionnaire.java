@@ -86,14 +86,13 @@ public class Service_Gestionnaire implements Runnable {
                 Integer.parseInt(splitRegi[5])
                 );
             register.add(currDiff);
-        }
-            pw.print("REOK\n");
-            pw.flush();
-            areUAlive(currDiff.getId());
+        }  
+        pw.print("REOK\n");
+        pw.flush();
+        areUAlive(currDiff.getId());
         synchronized (register) {
             register.remove(currDiff);
         }
-        
     }
 
     public void areUAlive(String id) { // check if the diffuser is still active
@@ -105,30 +104,30 @@ public class Service_Gestionnaire implements Runnable {
                         try {
                             pw.print("RUOK\n");
                             pw.flush();
-                            return br.readLine();
+                            String recv = br.readLine();
+                            return recv;
                                     
                         } catch (Exception e) {
                             System.out.println("connexion interupted with diffuser " + id);
                             return null;
                         }
                     }).get(1, TimeUnit.SECONDS);
+                    if (mess == null || !mess.equals("IMOK"))
+                        throw new TimeoutException();
                 }
                 catch(TimeoutException te){
                     pw.flush();
-                    System.out.println("time out diffuser released");
+                    System.out.println("connexion interupted with diffuser " + id);
                     return;
                 }
-            
-            if (mess == null || !mess.equals("IMOK"))
-                return;
             Thread.sleep(5000);
-                
             }
         } catch (Exception e) {
             System.out.println("areUalive error in Service_Gestionnaire");
             e.printStackTrace();
         }
     }
+
 
     // receipt file from client and write into directory Fichier/
     public void write_file() {
@@ -230,15 +229,10 @@ public class Service_Gestionnaire implements Runnable {
     public void gest() {
         try {
             String message = br.readLine();
-            // System.out.println("Request " + message);
-            if (message.startsWith("REGI ")){
-                System.out.println("new Diffuser connexion");
+            if (message.startsWith("REGI "))
                 Regi(message);
-            }
-            else{
-                System.out.println("new Client connexion");
+            else
                 client_handler(message);
-            }
         } catch (Exception e) {
         }
     }

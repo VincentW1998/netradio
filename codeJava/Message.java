@@ -1,11 +1,18 @@
+import java.text.Normalizer;
 public class Message {
     private String id, data;
 
     public Message(String identifiant, String msg){
         id = identifiant;
-        data = msg;
+        data = normalize(msg); //remove all accents 
     }
-
+    public static String normalize (String s){
+        String str = Normalizer.normalize(s, Normalizer.Form.NFD);
+        str = str.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        str = str.replace("’","'");
+        return str;
+    }
+    
     @Override
     public String toString() {
         return id + " " + data;
@@ -17,13 +24,5 @@ public class Message {
 
     public String getId(){
         return id;
-    }
-
-    public String remove_hashtag(String mess) {
-        int len = mess.length();
-        while(mess.charAt(len-1) == '#') {
-            len --;
-        }
-        return mess.substring(0, len);
     }
 }

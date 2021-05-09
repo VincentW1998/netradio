@@ -1,6 +1,7 @@
 import java.net.*;
-import java.util.Scanner;
 import java.io.*;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class Diffuser {
     private String id;
@@ -41,9 +42,9 @@ public class Diffuser {
             pw.print("REGI "+toString()+"\n");
             pw.flush();
             String message = br.readLine();
-            System.out.println("message received : "+message);
             if(!message.equals("REOK"))
                 return false;
+            System.out.println("Successfully registered");
             return true;
         }
         catch(Exception e){
@@ -126,7 +127,7 @@ public class Diffuser {
 
     public static void main(String [] args){
         try{
-            assert(args.length != 1);
+            assert(args.length != 1 || args.length != 3);
             int portGestionnaire = Integer.parseInt(args[0]);
             ServerSocket reception = Gestionnaire.connectToAvailablePort(9998); //port reception
             Socket connexionToGestionnaire;
@@ -138,8 +139,15 @@ public class Diffuser {
                 br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
                 pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
                 int portMultiDiff = portLeft(9998);
-                String id = fill_hashtag_or_zero(askID(), 8, "#");
-                String multicastIP = addressChecker(portMultiDiff);
+                String id, multicastIP;
+                if(args.length == 3){
+                    id = fill_hashtag_or_zero(args[1], 8, "#");
+                    multicastIP = args[2];
+                }
+                else{
+                    id = fill_hashtag_or_zero(askID(), 8, "#");
+                    multicastIP = addressChecker(portMultiDiff);
+                }
                 diffuser = new Diffuser(id, InetAddress.getByName(multicastIP), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort());
                 if(diffuser.getRegistered(br, pw))
                     break;
@@ -156,11 +164,14 @@ public class Diffuser {
             Thread imAliveCheck = new Thread(ia);
             imAliveCheck.start();
 
+            LinkedList<Message> msgs = new LinkedList<Message> ();
+            LinkedList<String> listFiles = new LinkedList<String>();
+
             // client treatment
             while (true){ 
                 Socket client = reception.accept();
-                Service_Diffuser SD = new Service_Diffuser(client, sm);
-                System.out.println("New connection detected");
+                Service_Diffuser SD = new Service_Diffuser(client, sm, msgs, listFiles);
+                // System.out.println("New connection detected");
                 Thread t = new Thread(SD);
                 t.start();
             }
