@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.concurrent.*;
 
 public class ImAlive implements Runnable{
     private PrintWriter pw;
@@ -8,24 +9,36 @@ public class ImAlive implements Runnable{
         br = b;
         pw = p; 
     }
-
     public void run(){
         try{
-            String message;
+            String message = "";
             while(true){
-                message = br.readLine();
+                try{
+                    message = CompletableFuture.supplyAsync(() -> {
+                        try {
+                            return (String) br.readLine();           
+                        } catch (Exception e) {
+                            return null;
+                        }
+                    }).get(6, TimeUnit.SECONDS);
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    System.exit(1);
+                }
                 if(message.equals("RUOK")){
                     pw.print("IMOK\n");
                     pw.flush();
                 }
                 else{
                     System.out.println("message not recognized");
-                    return;
+                    System.exit(1);
                 }
             }
         }
         catch(Exception e){
-            return;
+            System.out.println("Connexion interupted with Gestionnaire");
+            System.exit(1);
         }
     }
 }
