@@ -30,7 +30,6 @@ int main(int argc, char ** argv) {
     int port;
     char ip[16];
     char str_mess[156];
-    char tty[20];
     char idFile[4]; 
     
 
@@ -82,7 +81,7 @@ int main(int argc, char ** argv) {
                 port = which_port();
                 which_ip_id_message(ip, "ip adress of multicast: ", IPSIZE);
                 which_ip_id_message(tty, "tty : ", 20);
-                connexion_udp(port, ip, tty);
+                connexion_udp(port, ip);
             }
             else if (!strcmp(line, "FILE\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
@@ -113,7 +112,7 @@ int main(int argc, char ** argv) {
             }
             memset(line, '\0', BUFFSIZE);
             memset(ip, '\0', sizeof(char) * IPSIZE);
-            memset(tty, '\0', 20);
+            // memset(tty, '\0', 20);
             memset(str_mess, '\0', sizeof(char) * 156);
         }
     }

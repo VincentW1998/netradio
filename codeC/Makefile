@@ -1,5 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -g
+LDFLAGS=-pthread
 
 all : client
 

@@ -9,12 +9,9 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <poll.h>
-#include <fcntl.h>
+#include <pthread.h>
 
-sig_atomic_t volatile g_running;
+void*communication(void *arg);
 
-void sig_handler(int signum);
-
-int connexion_udp(int port, char * ip, char * tty);
+int connexion_udp(int port, char * ip);
 #endif
