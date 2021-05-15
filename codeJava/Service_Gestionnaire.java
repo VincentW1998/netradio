@@ -65,7 +65,7 @@ public class Service_Gestionnaire implements Runnable {
             String splitRegi[] = message.split(" ");
             if (!isGoodRegi(splitRegi) || register.size() >= maxDiff) { // check if the REGI message has the correct amount of arguments
                 System.out.println("Issue with Regi message, connection closed");
-                pw.print("RENO\n");
+                pw.print("RENO\r\n");
                 pw.flush();
                 client.close();
                 return;
@@ -87,7 +87,7 @@ public class Service_Gestionnaire implements Runnable {
                 );
             register.add(currDiff);
         }  
-        pw.print("REOK\n");
+        pw.print("REOK\r\n");
         pw.flush();
         areUAlive(currDiff.getId());
         synchronized (register) {
@@ -102,7 +102,7 @@ public class Service_Gestionnaire implements Runnable {
                 try{
                     mess = CompletableFuture.supplyAsync(() -> {
                         try {
-                            pw.print("RUOK\n");
+                            pw.print("RUOK\r\n");
                             pw.flush();
                             String recv = br.readLine();
                             return recv;
