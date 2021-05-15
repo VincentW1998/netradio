@@ -42,8 +42,8 @@ public class Service_Gestionnaire implements Runnable {
 
     public static boolean isGoodRegi(String mess[]) { // check if all arguments in REGI message is correct
         try {
-            if (mess.length != 6 || mess[1].length() != 8 || mess[2].length() != 15 || mess[3].length() != 4 || mess[4].length() != 15 || mess[5].length() != 4){
-                System.out.println("toto");
+            if (mess.length != 6 || mess[1].getBytes().length != 8 || mess[2].getBytes().length != 15 || mess[3].getBytes().length != 4 || mess[4].getBytes().length != 15 || mess[5].getBytes().length != 4){
+                // System.out.println("toto");
                 return false;
             }
 
@@ -107,8 +107,7 @@ public class Service_Gestionnaire implements Runnable {
                             String recv = br.readLine();
                             return recv;
                                     
-                        } catch (Exception e) {
-                            System.out.println("connexion interupted with diffuser " + id);
+                        } catch (IOException e) {
                             return null;
                         }
                     }).get(1, TimeUnit.SECONDS);

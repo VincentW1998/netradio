@@ -106,6 +106,21 @@ public class Diffuser {
         return res;
     }
 
+    public static String askIP(int port){
+        try{
+            Scanner ask = new Scanner(System.in);
+            System.out.print("Enter IP : ");
+            String res = ask.nextLine();
+            InetAddress address = InetAddress.getByName(res);
+            return res;
+        }
+        catch(Exception e){
+            System.out.println("IP");
+            return addressChecker(port);
+        }
+
+    }
+
     public static String fill_hashtag_or_zero(String str, int len, String symbol) {
         String tmp = "";
         int length = str.length();
@@ -127,20 +142,25 @@ public class Diffuser {
 
     public static void main(String [] args){
         try{
-            assert(args.length != 1 || args.length != 3);
+            assert(args.length != 1 || args.length != 4);
             int portGestionnaire = Integer.parseInt(args[0]);
             ServerSocket reception = Gestionnaire.connectToAvailablePort(9998); //port reception
             Socket connexionToGestionnaire;
             BufferedReader br;
             PrintWriter pw;
             Diffuser diffuser;
+            String ip;
+            if(args.length == 1)
+                ip = askIP(portGestionnaire);
+            else 
+                ip = args[3];
             while(true){ // check if the given id and multiDiff adrress are valid
-                connexionToGestionnaire =  new Socket("localhost", portGestionnaire);
+                connexionToGestionnaire =  new Socket(ip, portGestionnaire);
                 br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
                 pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
                 int portMultiDiff = portLeft(9998);
                 String id, multicastIP;
-                if(args.length == 3){
+                if(args.length == 4){
                     id = fill_hashtag_or_zero(args[1], 8, "#");
                     multicastIP = args[2];
                 }

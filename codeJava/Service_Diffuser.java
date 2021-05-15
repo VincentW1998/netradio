@@ -25,8 +25,12 @@ public class Service_Diffuser implements Runnable{
     }
 
     public void mess(String [] request){
-        if(request.length != 3 || request[1].length() != 8 || request[2].length() != 140){
+        if(request.length != 3){
             System.out.println("error in request");
+            return;
+        }
+        if(request[1].getBytes().length != 8 || request[2].getBytes().length != 140){
+            System.out.println("bad length for id or message");
             return;
         }
         synchronized(msgs){
@@ -102,7 +106,7 @@ public class Service_Diffuser implements Runnable{
     public void diff(){
         try{
             String message = br.readLine();
-            System.out.println(message);
+            // System.out.println(message);
             String str [] = message.split(" ",3);
             switch(str[0]){
                 case "MESS":

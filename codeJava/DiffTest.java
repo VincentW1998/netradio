@@ -8,7 +8,7 @@ public class DiffTest implements Runnable{
     }
 
     public void run(){
-        String args [] = new String [] { gestPort, id, multidiffIp };
+        String args [] = new String [] { gestPort, id, multidiffIp, "localhost" };
         Diffuser.main(args);   
     }
 }

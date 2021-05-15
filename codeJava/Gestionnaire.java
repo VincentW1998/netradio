@@ -16,9 +16,6 @@ public class Gestionnaire {
     public static void main(String[] args) {
         try {
             ServerSocket server = connectToAvailablePort(9998);
-            URL url = new URL("http://checkip.amazonaws.com/");
-            BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
-            System.out.println(br.readLine()); 
             System.out.println("Gestionnaire connected to port " + server.getLocalPort());
             while (true) {
                 Socket client = server.accept();

@@ -23,7 +23,7 @@ public class ImAlive implements Runnable{
                     }).get(6, TimeUnit.SECONDS);
                 }
                 catch(Exception e){
-                    e.printStackTrace();
+                    // e.printStackTrace();
                     System.exit(1);
                 }
                 if(message.equals("RUOK")){
