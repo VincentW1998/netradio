@@ -19,7 +19,7 @@ public class Client{
             };
             
             for(int x = 0 ; x < 1; x++){
-                for(int i =0 ; i < msgs.length ; i++){
+                for(int i =0 ; i < 1 ; i++){
                     Socket client=new Socket("localhost",p);
                     String id =  String.format("%0$-" + 8 + "s", "RADIO"+String.valueOf(i)).replace(' ', '#');
                     ClientTest ct = new ClientTest(client,id, msgs[i]);

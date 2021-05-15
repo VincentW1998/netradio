@@ -103,16 +103,38 @@ public class Service_Diffuser implements Runnable{
         }
     }
 
+    public String readline(){
+        try{
+        String str = "";
+        char c = '\0';
+        while(br.ready() || c != '\n'){
+            c = (char) br.read();
+            str += c;
+        }
+        return str;
+        }
+        catch(Exception e){
+            return null;
+        }
+    }
+
+    public boolean checkEnding(String message){
+        if(! message.substring(message.length()-2, message.length()).equals("\r\n")){ // check if the message has \r\n at the end
+            System.out.println("\\r and \\n missing");
+            return false;
+        }
+        return true;
+    }
+
     public void diff(){
         try{
-            String message = br.readLine();
-            // System.out.println(message);
+            String message = readline();
+            message = message.substring(0,message.length()-2);
             String str [] = message.split(" ",3);
             switch(str[0]){
                 case "MESS":
                     mess(str);
                     return;
-
                 case "LAST":
                     last(str);
                     return;
