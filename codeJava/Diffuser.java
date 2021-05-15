@@ -38,7 +38,7 @@ public class Diffuser {
 
     public boolean getRegistered(BufferedReader br, PrintWriter pw){ // will try to register until REOK is received
         try{   
-            pw.print("REGI "+toString()+"\n");
+            pw.print("REGI "+toString()+"\r\n");
             pw.flush();
             String message = br.readLine();
             System.out.println("message received : "+message);
@@ -134,7 +134,7 @@ public class Diffuser {
             PrintWriter pw;
             Diffuser diffuser;
             while(true){ // check if the given id and multiDiff adrress are valid
-                connexionToGestionnaire =  new Socket("localhost", portGestionnaire);
+                connexionToGestionnaire =  new Socket("90.61.41.61", portGestionnaire);
                 br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
                 pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
                 int portMultiDiff = portLeft(9998);
