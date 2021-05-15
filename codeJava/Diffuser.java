@@ -134,7 +134,7 @@ public class Diffuser {
             PrintWriter pw;
             Diffuser diffuser;
             while(true){ // check if the given id and multiDiff adrress are valid
-                connexionToGestionnaire =  new Socket("90.61.41.61", portGestionnaire);
+                connexionToGestionnaire =  new Socket("localhost", portGestionnaire);
                 br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
                 pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
                 int portMultiDiff = portLeft(9998);

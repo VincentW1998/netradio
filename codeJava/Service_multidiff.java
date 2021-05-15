@@ -42,7 +42,7 @@ public class Service_multidiff implements Runnable{
                     n += 1;
                 }
             }
-            Thread.sleep(4000);
+            Thread.sleep(3000);
             broadcast(n, numMess);
         }
         catch(Exception e){

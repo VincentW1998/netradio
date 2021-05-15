@@ -4,7 +4,6 @@
 
 /* part of client code for LIST request */
 int recv_for_list(int descr, int len) {
-    // LIMB 03\r\n
     char buff[10];
     int size_rec;
     size_rec = recv(descr, buff, 9 * sizeof(char), 0);
@@ -22,7 +21,6 @@ int recv_for_list(int descr, int len) {
         for (int i = 0; i < num_diff; i++) {
             char tmp[len+1];
             size_rec = recv(descr, tmp, (len) * sizeof(char), 0);
-            printf("size_rec :%d\n", size_rec);
             tmp[size_rec] = '\0';
             printf("%s", tmp);
         }

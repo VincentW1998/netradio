@@ -16,6 +16,7 @@
 
 char * error_len;
 char * error_ipport;
+char tty[20];
 
 char * fill_hashtag_or_zero(char * id, int idOrMess, char * symbol);
 
