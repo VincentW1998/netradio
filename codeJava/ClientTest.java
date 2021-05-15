@@ -9,12 +9,14 @@ public class ClientTest implements Runnable{
         client = c;
         id = i;
         msg = Diffuser.fill_hashtag_or_zero(mess, 140, "#");
+        msg = Message.normalize(msg);
     }
 
     public void run(){
         try{
                 BufferedReader br=new BufferedReader(new InputStreamReader(client.getInputStream()));
                 PrintWriter pw=new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
+                
                 String message = "MESS "+id+" "+msg+"\r\n"; // 156
                 System.out.println("taille : " + message.length());
                 pw.print(message);

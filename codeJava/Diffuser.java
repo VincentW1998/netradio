@@ -39,12 +39,12 @@ public class Diffuser {
 
     public boolean getRegistered(BufferedReader br, PrintWriter pw){ // will try to register until REOK is received
         try{   
-            pw.print("REGI "+toString()+"\n");
+            pw.print("REGI "+toString()+"\r\n");
             pw.flush();
             String message = br.readLine();
             if(!message.equals("REOK"))
                 return false;
-            System.out.println("Successfully registered");
+            // System.out.println("Successfully registered");
             return true;
         }
         catch(Exception e){

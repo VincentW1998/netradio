@@ -27,7 +27,7 @@ public class ImAlive implements Runnable{
                     System.exit(1);
                 }
                 if(message.equals("RUOK")){
-                    pw.print("IMOK\n");
+                    pw.print("IMOK\r\n");
                     pw.flush();
                 }
                 else{

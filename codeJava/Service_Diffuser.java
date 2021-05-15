@@ -39,7 +39,7 @@ public class Service_Diffuser implements Runnable{
             sm.add(msg);
         }
         System.out.println("Message received - ACKM sent");
-        pw.print("ACKM\n");
+        pw.print("ACKM\r\n");
         pw.flush();
     }
 
@@ -102,6 +102,7 @@ public class Service_Diffuser implements Runnable{
     public void diff(){
         try{
             String message = br.readLine();
+            System.out.println(message);
             String str [] = message.split(" ",3);
             switch(str[0]){
                 case "MESS":
