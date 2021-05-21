@@ -30,5 +30,5 @@ int print_menu();
 
 int print_error(char * mess);
 
-int which_port();
+int which_port(char * m);
 #endif

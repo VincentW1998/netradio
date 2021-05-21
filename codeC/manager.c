@@ -38,8 +38,7 @@ char * remove_hashtag(char * str) {
 
 
 /* ask port between 0 and 9999 */
-int which_port() {
-    char * m = "Port (0, 9998): ";
+int which_port(char * m) {
     int p = -1;
     while(p <0 || p > 9998) {
         write(1, m, strlen(m));
