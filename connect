@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ssh -t $2@$1 -J $2@lucy.informatique.univ-paris-diderot.fr
