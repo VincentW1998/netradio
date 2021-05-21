@@ -31,7 +31,9 @@ int main(int argc, char ** argv) {
     char ip[16];
     char str_mess[156];
     char idFile[4]; 
-    
+    char * portDiff = "Enter diffuser's port :";
+    char * portDiffMul = "Enter diffuser's multicast port :";
+    char * portReg = "Enter register's port :";
 
     /* END OF INITIALISATION VARIABLES */
     
@@ -54,7 +56,7 @@ int main(int argc, char ** argv) {
 
             else if (!strcmp(line, "LAST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = which_port();
+                port = which_port(portDiff);
                 type_last(str_last);
                 which_ip_id_message(ip, "diffuser's ip adress : ", IPSIZE);
                 connexion_tcp(port, str_last, ip, 1);
@@ -62,7 +64,7 @@ int main(int argc, char ** argv) {
 
             else if (!strcmp(line, "LIST\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = which_port();
+                port = which_port(portReg);
                 which_ip_id_message(ip, "register's ip address : ", IPSIZE);
                 connexion_tcp(port, "LIST\r\n", ip, 0);
 
@@ -70,7 +72,7 @@ int main(int argc, char ** argv) {
 
             else if (!strcmp(line, "MESS\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = which_port();
+                port = which_port(portDiff);
                 which_ip_id_message(ip, "diffuser's ip adress : ", IPSIZE);
                 type_mess(str_mess, id_client);
                 connexion_tcp(port, str_mess, ip, 2);
@@ -78,27 +80,27 @@ int main(int argc, char ** argv) {
 
             else if (!strcmp(line, "LISTEN\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = which_port();
+                port = which_port(portDiffMul);
                 which_ip_id_message(ip, "ip adress of multicast: ", IPSIZE);
                 which_ip_id_message(tty, "tty : ", 20);
                 connexion_udp(port, ip);
             }
             else if (!strcmp(line, "FILE\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = which_port();
+                port = which_port(portReg);
                 which_ip_id_message(ip, "register's ip address : ", IPSIZE);
                 connexion_tcp(port, "FILE\r\n", ip, 3);
             }
             else if (!strcmp(line, "LISTFILES\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = which_port();
+                port = which_port(portDiff);
                 which_ip_id_message(ip, "diffuser's ip adress : ", IPSIZE);
                 connexion_tcp(port, "LISTFILES\r\n", ip, 4);
             }
 
             else if (!strcmp(line, "DOWNLOAD\n")) {
                 memset(line, '\0', sizeof(char) * BUFFSIZE);
-                port = which_port();
+                port = which_port(portReg);
                 which_ip_id_message(ip, "register's ip adress : ", IPSIZE);
                 which_ip_id_message(idFile, "id of file : ", 4);
                 strcpy(str_mess, "DOWNLOAD ");
