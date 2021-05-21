@@ -5,10 +5,12 @@
 char * type_mess(char * request, char * id) {
     memset(request, '\0', sizeof(char) * 156);
     char * tmp = malloc(sizeof(char) * 156 + 1);
+    memset(tmp, '\0', sizeof(char) * 156 + 1);
     strcat(tmp, "MESS ");
     strcat(tmp, id);
     strcat(tmp, " ");
-    char * message = malloc(sizeof(char) * MESSSIZE);
+    char * message;
+    message = malloc(sizeof(char) * MESSSIZE);
     memset(message, '\0', sizeof(char) * MESSSIZE);
     which_ip_id_message(message, "message : ", MESSSIZE);
     message = fill_hashtag_or_zero(message, MESSSIZE, "#");

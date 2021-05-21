@@ -13,7 +13,9 @@ char * type_last(char * request) {
     strcat(tmp, nb_mess);
     strcat(tmp, "\r\n");
     strcpy(request, tmp);
-    return tmp;
+    free(nb_mess);
+    free(tmp);
+    return "";
 }
 
 /* par of client code for LAST request */

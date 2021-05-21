@@ -92,5 +92,6 @@ int write_file(int sock) {
         write(STDOUT_FILENO, contentGood + total_ecrit, strlen(contentGood) - total_ecrit);
         
     }
+    free(path);
     return 0;
 }
