@@ -66,10 +66,13 @@ public class Service_Diffuser implements Runnable{
             // }
             synchronized(sm.lastDiffMsgs){
                 System.out.println("--- " + sm.lastDiffMsgs.size() + " messages ---");
-                // if(nbMess > sm.lastDiffMsgs.size())
                 int lenMess = sm.lastDiffMsgs.size();
+                if(nbMess > sm.lastDiffMsgs.size()) {
+                    nbMess = sm.lastDiffMsgs.size();
+                }
                 for(int i=0; i<nbMess; i++){
                     String nb_with_zero = String.format("%04d", (lenMess-i));
+                    System.out.println()
                     pw.print("OLDM " + nb_with_zero +" "+ sm.lastDiffMsgs.get(lenMess-i-1).toString()+"\r\n");
                     pw.flush();
                 }
