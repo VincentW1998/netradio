@@ -21,7 +21,6 @@ public class Gestionnaire {
                 Socket client = server.accept();
                 int maxDiff = Integer.parseInt(args[0]);
                 Service_Gestionnaire SG = new Service_Gestionnaire(client,maxDiff);
-                // System.out.println("New connection detected");
                 Thread t = new Thread(SG);
                 t.start();
             }

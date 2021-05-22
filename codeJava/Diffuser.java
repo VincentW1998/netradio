@@ -194,7 +194,6 @@ public class Diffuser {
             while (true){ 
                 Socket client = reception.accept();
                 Service_Diffuser SD = new Service_Diffuser(client, sm, msgs, listFiles);
-                // System.out.println("New connection detected");
                 Thread t = new Thread(SD);
                 t.start();
             }
