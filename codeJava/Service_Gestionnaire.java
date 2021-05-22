@@ -104,7 +104,7 @@ public class Service_Gestionnaire implements Runnable {
                         try {
                             pw.print("RUOK\r\n");
                             pw.flush();
-                            String recv = br.readLine();
+                            String recv = br.readline();
                             return recv;
                                     
                         } catch (IOException e) {
@@ -161,8 +161,9 @@ public class Service_Gestionnaire implements Runnable {
             try {
                 Socket client = new Socket(diffu.getIp2(), diffu.getPort2());
                 PrintWriter pwriter = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
-                pwriter.print("FILEREG\n");
-                pwriter.print(fileName + '\n');
+                pwriter.print("FILEREG\r\n");
+                pwriter.flush();
+                pwriter.print(fileName + "\r\n);
                 pwriter.flush();
                 pwriter.close();
                 client.close();

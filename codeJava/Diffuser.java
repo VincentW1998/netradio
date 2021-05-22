@@ -44,7 +44,7 @@ public class Diffuser {
             String message = br.readLine();
             if(!message.equals("REOK"))
                 return false;
-            // System.out.println("Successfully registered");
+            System.out.println("Successfully registered");
             return true;
         }
         catch(Exception e){
