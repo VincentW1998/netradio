@@ -27,12 +27,13 @@ public class Service_Gestionnaire implements Runnable {
         }
     }
 
-     public static boolean isUnique( String id, InetAddress MulticastIp){
+     public static boolean isUnique( String id, InetAddress MulticastIp, int MulticastPort){
         for (int i = 0 ; i < register.size(); i++){
-            if( MulticastIp.equals( register.get(i).getIp1())){
-                System.out.println("MulticastAddress is already used");
+            if( MulticastIp.equals(register.get(i).getIp1()) && MulticastPort == register.get(i).getPort1()){
+                System.out.println("MulticastAddress or Multicast Port is already used");
                 return false;
             }
+
             if(id.equals( register.get(i).getId())){
                 System.out.println("ID is already used");
                 return false;
@@ -52,7 +53,7 @@ public class Service_Gestionnaire implements Runnable {
             InetAddress IP2 = InetAddress.getByName(mess[4]);
             int port1 = Integer.parseInt(mess[3]);
             int port2 = Integer.parseInt(mess[5]);
-            return isUnique(mess[1], IP1) && port1 < 9999 && port1 >= 1024 && port2 < 9999 && port2 >= 1024;
+            return isUnique(mess[1], IP1, port1) && port1 < 9999 && port1 >= 1024 && port2 < 9999 && port2 >= 1024;
         } catch (UnknownHostException ue) {
             System.out.println("unknownHostException");
             return false;
@@ -244,7 +245,6 @@ public class Service_Gestionnaire implements Runnable {
                 return;
             message = message.substring(0,message.length()-2); //remove \r\n from the request
             if (message.startsWith("REGI ")) {
-                System.out.println(message);
                 Regi(message);
             }
 

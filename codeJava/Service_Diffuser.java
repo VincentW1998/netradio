@@ -54,16 +54,6 @@ public class Service_Diffuser implements Runnable{
                 System.out.println("\terror in last message composition");
                 return;
             }
-            // synchronized(msgs){
-            //     System.out.println("\tContient " + msgs.size() + " messages");
-            //     if(nbMess > msgs.size())
-            //         nbMess = msgs.size();
-            //     for(int i=0; i<nbMess; i++){
-            //         String nb_with_zero = String.format("%04d", i+1);
-            //         pw.print("OLDM " + nb_with_zero +" "+msgs.get(i).toString()+"\r\n");
-            //         pw.flush();
-            //     }
-            // }
             synchronized(sm.lastDiffMsgs){
                 System.out.println("--- " + sm.lastDiffMsgs.size() + " messages ---");
                 int lenMess = sm.lastDiffMsgs.size();
