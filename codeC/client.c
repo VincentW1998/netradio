@@ -42,14 +42,16 @@ int main(int argc, char ** argv) {
     char * begin = "Type HELP : print all commands available !\n";
     write(1, begin, strlen(begin));
 
-
+    /* main while loop interpret all commands */
     while (1) {
-        print_prompt();
+        print_prompt(); // display prompt
         memset(line, '\0', sizeof(line));
         if ((n = read(0, line, BUFFSIZE) > 0)) {
+
             if (!strcmp(line, "QUIT\n")) {
                 break;
             }
+
             else if (!strcmp(line, "HELP\n")) {
                 print_menu();
             }
