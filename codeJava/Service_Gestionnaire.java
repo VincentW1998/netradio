@@ -243,8 +243,11 @@ public class Service_Gestionnaire implements Runnable {
             if(!manager.checkEnding(message))
                 return;
             message = message.substring(0,message.length()-2); //remove \r\n from the request
-            if (message.startsWith("REGI "))
+            if (message.startsWith("REGI ")) {
+                System.out.println(message);
                 Regi(message);
+            }
+
             else
                 client_handler(message);
         } catch (Exception e) {
