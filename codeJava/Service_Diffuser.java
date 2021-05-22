@@ -89,7 +89,7 @@ public class Service_Diffuser implements Runnable{
     public void listFiles() {
         synchronized(listFiles){
             try {
-                pw.write("NBFI "+String.format("%02d", listFiles.size())+"\n");
+                pw.write("NBFI "+String.format("%02d", listFiles.size())+"\r\n");
                 for(String fileName : listFiles) {
                     pw.write(fileName);
                 }
