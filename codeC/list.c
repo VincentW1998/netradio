@@ -36,6 +36,7 @@ int recv_listFiles(int descr, int nb, int len) {
         tmp[size_rec] = '\0';
         char * str = remove_hashtag(tmp);
         printf("file %d : %s\n", i, str);
+        free(tmp);
     }
     return 0;
 }
