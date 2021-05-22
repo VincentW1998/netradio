@@ -168,7 +168,8 @@ public class Diffuser {
                     id = fill_hashtag_or_zero(askID(), 8, "#");
                     multicastIP = addressChecker(portMultiDiff);
                 }
-                diffuser = new Diffuser(id, InetAddress.getByName(multicastIP), portMultiDiff,  reception.getInetAddress(), reception.getLocalPort());
+                InetAddress address = InetAddress.getLocalHost();
+                diffuser = new Diffuser(id, InetAddress.getByName(multicastIP), portMultiDiff,  address, reception.getLocalPort());
                 if(diffuser.getRegistered(br, pw))
                     break;
             }
