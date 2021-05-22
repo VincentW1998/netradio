@@ -114,7 +114,6 @@ int main(int argc, char ** argv) {
             }
             memset(line, '\0', BUFFSIZE);
             memset(ip, '\0', sizeof(char) * IPSIZE);
-            // memset(tty, '\0', 20);
             memset(str_mess, '\0', sizeof(char) * 156);
         }
     }
