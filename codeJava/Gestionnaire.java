@@ -19,7 +19,8 @@ public class Gestionnaire {
             System.out.println("Gestionnaire connected to port " + server.getLocalPort());
             while (true) {
                 Socket client = server.accept();
-                Service_Gestionnaire SG = new Service_Gestionnaire(client);
+                int maxDiff = Integer.parseInt(args[0]);
+                Service_Gestionnaire SG = new Service_Gestionnaire(client,maxDiff);
                 // System.out.println("New connection detected");
                 Thread t = new Thread(SG);
                 t.start();

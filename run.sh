@@ -17,7 +17,9 @@ elif [ "$1" == "gest" ]; then
   cd codeJava/
   rm *.class
   javac Gestionnaire.java
-  java Gestionnaire
+  echo "Number of max diffuser : "
+  read maxDiff
+  java Gestionnaire $maxDiff
 elif [ "$1" == "diff" ]; then
   cd codeJava/
   rm *.class
