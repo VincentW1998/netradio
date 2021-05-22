@@ -22,7 +22,18 @@ int recv_for_list(int descr, int len) {
             char tmp[len+1];
             size_rec = recv(descr, tmp, (len) * sizeof(char), 0);
             tmp[size_rec] = '\0';
-            printf("%s", tmp);
+            int j = 0;
+            char * tok = strtok(tmp, " ");
+            char * array[6];
+            while( tok != NULL) {
+                array[j++] = tok;
+                tok = strtok(NULL, " ");
+            }
+            printf("\tID : %s\n", array[1]);
+            printf("\tMulticast Address : %s\n", array[2]);
+            printf("\tMulticast Port : %s\n", array[3]);
+            printf("\tIP Address: %s\n", array[4]);
+            printf("\tPort : %s\n", array[5]);
         }
     }
     return 0;
