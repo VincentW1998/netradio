@@ -72,7 +72,6 @@ public class Service_Diffuser implements Runnable{
                 }
                 for(int i=0; i<nbMess; i++){
                     String nb_with_zero = String.format("%04d", (lenMess-i));
-                    System.out.println()
                     pw.print("OLDM " + nb_with_zero +" "+ sm.lastDiffMsgs.get(lenMess-i-1).toString()+"\r\n");
                     pw.flush();
                 }
