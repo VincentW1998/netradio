@@ -25,4 +25,9 @@ elif [ "$1" == "diff" ]; then
   echo "Enter register's port : "
   read port
   java Diffuser $id2 $port
+elif [ "$1" == "difftest" ]; then
+  cd codeJava/
+  rm *.class
+  javac Diffuser.java
+  java Diffuser $id2 "9998" "toto" "225.0.0.0" "localhost"
 fi

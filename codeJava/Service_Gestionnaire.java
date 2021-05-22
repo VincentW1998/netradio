@@ -104,14 +104,14 @@ public class Service_Gestionnaire implements Runnable {
                         try {
                             pw.print("RUOK\r\n");
                             pw.flush();
-                            String recv = br.readLine();
+                            String recv = manager.readline(br);
                             return recv;
                                     
                         } catch (IOException e) {
                             return null;
                         }
                     }).get(1, TimeUnit.SECONDS);
-                    if (mess == null || !mess.equals("IMOK"))
+                    if (mess == null || !mess.equals("IMOK\r\n"))
                         throw new TimeoutException();
                 }
                 catch(TimeoutException te){
@@ -119,7 +119,7 @@ public class Service_Gestionnaire implements Runnable {
                     System.out.println("connexion interupted with diffuser " + id);
                     return;
                 }
-            Thread.sleep(5000);
+            Thread.sleep(5000); // RUOK time 
             }
         } catch (Exception e) {
             System.out.println("areUalive error in Service_Gestionnaire");
@@ -161,8 +161,9 @@ public class Service_Gestionnaire implements Runnable {
             try {
                 Socket client = new Socket(diffu.getIp2(), diffu.getPort2());
                 PrintWriter pwriter = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
-                pwriter.print("FILEREG\n");
-                pwriter.print(fileName + '\n');
+                pwriter.print("FILEREG\r\n");
+                pwriter.flush();
+                pwriter.print(fileName + "\r\n");
                 pwriter.flush();
                 pwriter.close();
                 client.close();
@@ -227,7 +228,14 @@ public class Service_Gestionnaire implements Runnable {
 
     public void gest() {
         try {
-            String message = br.readLine();
+            String message = manager.readline(br);
+            if(message.length() < 2){
+                System.out.println("Unknown request"); 
+                return;
+            }
+            if(!manager.checkEnding(message))
+                return;
+            message = message.substring(0,message.length()-2); //remove \r\n from the request
             if (message.startsWith("REGI "))
                 Regi(message);
             else

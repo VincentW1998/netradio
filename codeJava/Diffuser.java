@@ -41,10 +41,10 @@ public class Diffuser {
         try{   
             pw.print("REGI "+toString()+"\r\n");
             pw.flush();
-            String message = br.readLine();
-            if(!message.equals("REOK"))
+            String message = manager.readline(br);
+            if(!message.equals("REOK\r\n"))
                 return false;
-            // System.out.println("Successfully registered");
+            System.out.println("Successfully registered");
             return true;
         }
         catch(Exception e){
