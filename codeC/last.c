@@ -18,7 +18,7 @@ char * type_last(char * request) {
     return "";
 }
 
-/* par of client code for LAST request */
+/* receive messages [OLDM ...] for LAST request */
 int recv_for_last(int descr) {
     char buff[162];
     int size_rec = GOODLEN;

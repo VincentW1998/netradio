@@ -3,31 +3,33 @@
 #define FILESIZE 1024
 #define NAMESIZE 100
 
+/* send file to register */
 int send_file(int sock) {
     int n;
     int size_rec;
     char content[FILESIZE];
     FILE * file;
     char name[NAMESIZE];
+    memset(name, '\0', sizeof(char) * NAMESIZE);
     char tmp[100];
     char * cancel = "-CANCELED-\n";
     char * end = "-ENDFILE-\n";
-    char * askName = "Enter path file : ";
-    memset(name, '\0', sizeof(char) * NAMESIZE);
 
-    write(1, askName, strlen(askName));
-    n = read(0, name, NAMESIZE);
+    char * askName = "Enter path file : ";
+    write(1, askName, strlen(askName)); // ask path file
+
+    n = read(0, name, NAMESIZE); // read path file
     name[n-1] = '\0';
 
-    if((file = fopen(name, "r")) == NULL) {
-        send(sock, cancel, sizeof(char) * strlen(cancel), 0);
+    if((file = fopen(name, "r")) == NULL) { // open file
+        send(sock, cancel, sizeof(char) * strlen(cancel), 0); // send "-CANCELED-" to register
         printf("Error open file\n");
         return -1;
     }
     strcat(name, "\n");
-    send(sock, name, sizeof(char) * strlen(name), 0); // first send filename
+    send(sock, name, sizeof(char) * strlen(name), 0); // send filename to register
     
-    while(fgets(content, FILESIZE, file) != NULL) { // send char by char
+    while(fgets(content, FILESIZE, file) != NULL) { // send char by char to register
         if ((n = send(sock, content, sizeof(char) * strlen(content), 0)) == -1) {
             printf("Error send file\n");
             return -1;
@@ -43,6 +45,7 @@ int send_file(int sock) {
     return 0;
 }
 
+/* write file for DOWNLOAD command */
 int write_file(int sock) {
     int size_rec;
     char  name[31];
@@ -51,12 +54,12 @@ int write_file(int sock) {
     int fd;
 
     char * path = malloc(sizeof(char) * 100);
-    which_ip_id_message(path, "location : ", 100);
+    which_ip_id_message(path, "location : ", 100); // ask where to put the file
     
     // receive file name
     size_rec = recv(sock, name, 30 * sizeof(char), 0);
     name[size_rec] = '\0';
-    char * newName = remove_hashtag(name);
+    char * newName = remove_hashtag(name); // remove #
     if (!strcmp(newName, "-CANCELED-")) {
         printf("Error id !\n");
         return -1;
@@ -70,7 +73,7 @@ int write_file(int sock) {
         return -1;
     }
 
-    if((fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0644)) < 0 ) {
+    if((fd = open(tmp, O_WRONLY | O_CREAT | O_TRUNC, 0644)) < 0 ) { // open file write mode
         printf("Error open file\n");
         return -1;
     }
