@@ -45,7 +45,6 @@ public class Service_multidiff implements Runnable{
                     Message msg = msgs.get(n);
                     addLast(msg);
                     String str = "DIFF " + String.format("%04d", numMess+1) + " " + msg.toString() + "\r\n";
-                    System.out.println(str);
                     byte [] data = str.getBytes();
                     DatagramPacket paquet = new DatagramPacket(data, data.length, ia);
                     dso.send(paquet);
