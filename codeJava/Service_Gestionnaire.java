@@ -191,6 +191,9 @@ public class Service_Gestionnaire implements Runnable {
             reader.close();
         }
         catch (Exception e) {
+            String errorF = Diffuser.fill_hashtag_or_zero("-CANCELED-", 30, "#");
+            pw.print(errorF);
+            pw.flush();
             System.out.println("Error read file !");
         }
     }

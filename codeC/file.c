@@ -57,6 +57,10 @@ int write_file(int sock) {
     size_rec = recv(sock, name, 30 * sizeof(char), 0);
     name[size_rec] = '\0';
     char * newName = remove_hashtag(name);
+    if (!strcmp(newName, "-CANCELED-")) {
+        printf("Error id !\n");
+        return -1;
+    }
     memset(name, '\0', sizeof(char) * 31);
     strcpy(tmp, path);
     strcat(tmp, newName);
