@@ -5,6 +5,7 @@ public class Service_multidiff implements Runnable{
     DatagramSocket dso;
     InetSocketAddress ia;
     static LinkedList <Message> msgs = new LinkedList <Message> ();
+    static LinkedList <Message> lastDiffMsgs = new LinkedList <Message> ();
 
     public Service_multidiff(InetSocketAddress inetSock){
         try{
@@ -26,15 +27,24 @@ public class Service_multidiff implements Runnable{
                 msgs.remove(i);
         }
     }
+
+    public synchronized void addLast(Message msg){
+        if(lastDiffMsgs.size()>=999){
+            lastDiffMsgs.removeFirst();
+        }
+        lastDiffMsgs.add(msg);
+    }
     
     public void broadcast(int i, int numMess){
         try{
             int n = 0;
             synchronized(msgs){
                 if(msgs.size()>0){
+                    
                     n = i % msgs.size();
                     Message msg = msgs.get(n);
-                    String str = "DIFF " + String.format("%04d", numMess) + " " + msg.toString() + "\r\n";
+                    addLast(msg);
+                    String str = "DIFF " + String.format("%04d", numMess+1) + " " + msg.toString() + "\r\n";
                     byte [] data = str.getBytes();
                     DatagramPacket paquet = new DatagramPacket(data, data.length, ia);
                     dso.send(paquet);

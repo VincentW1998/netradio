@@ -7,7 +7,7 @@ import java.util.concurrent.TimeoutException;
 
 public class Service_Gestionnaire implements Runnable {
     private Socket client;
-    private final int maxDiff = 99;
+    private final int maxDiff;
     private BufferedReader br;
     private PrintWriter pw;
     static LinkedList < Diffuser > register = new LinkedList < Diffuser > ();
@@ -15,8 +15,9 @@ public class Service_Gestionnaire implements Runnable {
 
     
 
-    public Service_Gestionnaire(Socket c) {
+    public Service_Gestionnaire(Socket c, int mDiff) {
         client = c;
+        maxDiff = mDiff;
         try {
             br = new BufferedReader(new InputStreamReader(client.getInputStream()));
             pw = new PrintWriter(new OutputStreamWriter(client.getOutputStream()));
@@ -64,7 +65,10 @@ public class Service_Gestionnaire implements Runnable {
         synchronized (register) {
             String splitRegi[] = message.split(" ");
             if (!isGoodRegi(splitRegi) || register.size() >= maxDiff) { // check if the REGI message has the correct amount of arguments
-                System.out.println("Issue with Regi message, connection closed");
+                if(register.size() >= maxDiff)
+                    System.out.println("Register full : connection closed");
+                else
+                    System.out.println("Issue with Regi message, connection closed");
                 pw.print("RENO\r\n");
                 pw.flush();
                 client.close();
