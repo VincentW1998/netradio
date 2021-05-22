@@ -2,18 +2,18 @@ import java.io.*;
 import java.net.*;
 
 public class manager {
-    public static String readline(BufferedReader br){
+    public static String readline(BufferedReader br) throws IOException {
         try{
             String str = "";
             char c = '\0';
-            while(br.ready() && c != '\n'){
+            while( c != '\n'){
                 c = (char) br.read();
                 str += c;
             }
             return str;
         }
-        catch(Exception e){
-            return null;
+        catch(IOException e){
+            throw e;
         }
     }
 

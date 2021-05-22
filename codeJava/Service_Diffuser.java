@@ -55,7 +55,7 @@ public class Service_Diffuser implements Runnable{
                 return;
             }
             synchronized(msgs){
-                System.out.println("--- " + msgs.size() + " messages ---");
+                System.out.println("\tContient " + msgs.size() + " messages");
                 if(nbMess > msgs.size())
                     nbMess = msgs.size();
                 for(int i=0; i<nbMess; i++){
@@ -76,7 +76,7 @@ public class Service_Diffuser implements Runnable{
     // Stock the path file into list and print this list
     public void stockFile() {
         try{
-            String fileName = manager.readline(br);
+            String fileName = br.readLine();
             System.out.println("\tReceived this file : " + fileName);
             fileName = Diffuser.fill_hashtag_or_zero(fileName, 25, "#");
             listFiles.add(fileName);
@@ -111,7 +111,8 @@ public class Service_Diffuser implements Runnable{
             }
             if(!manager.checkEnding(message))
                 return;
-            String str [] = message.split("[ ]|[\\r]|[\\n]",2);
+            message = message.substring(0,message.length()-2);
+            String str [] = message.split(" ",2);
             System.out.println("Request : " + str[0]);
             switch(str[0]){
                 case "MESS":  

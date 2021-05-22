@@ -16,22 +16,21 @@ public class ImAlive implements Runnable{
                 try{
                     message = CompletableFuture.supplyAsync(() -> {
                         try {
-                            return (String) br.readLine();           
+                            return (String) manager.readline(br);         
                         } catch (Exception e) {
                             return null;
                         }
                     }).get(6, TimeUnit.SECONDS);
                 }
                 catch(Exception e){
-                    // e.printStackTrace();
                     System.exit(1);
                 }
-                if(message.equals("RUOK")){
+                if(message.equals("RUOK\r\n")){
                     pw.print("IMOK\r\n");
                     pw.flush();
                 }
                 else{
-                    System.out.println("message not recognized");
+                    System.out.println("IMALIVE : message not recognized");
                     System.exit(1);
                 }
             }
