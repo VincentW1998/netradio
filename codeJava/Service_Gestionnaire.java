@@ -65,7 +65,10 @@ public class Service_Gestionnaire implements Runnable {
         synchronized (register) {
             String splitRegi[] = message.split(" ");
             if (!isGoodRegi(splitRegi) || register.size() >= maxDiff) { // check if the REGI message has the correct amount of arguments
-                System.out.println("Issue with Regi message, connection closed");
+                if(register.size() >= maxDiff)
+                    System.out.println("Register full : connection closed");
+                else
+                    System.out.println("Issue with Regi message, connection closed");
                 pw.print("RENO\r\n");
                 pw.flush();
                 client.close();

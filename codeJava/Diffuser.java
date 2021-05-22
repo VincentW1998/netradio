@@ -109,7 +109,7 @@ public class Diffuser {
     public static String askIP(int port){
         try{
             Scanner ask = new Scanner(System.in);
-            System.out.print("Enter IP : ");
+            System.out.print("Enter register's IP : ");
             String res = ask.nextLine();
             InetAddress address = InetAddress.getByName(res);
             return res;
@@ -154,24 +154,26 @@ public class Diffuser {
                 ip = askIP(portGestionnaire);
             else 
                 ip = args[3];
-            while(true){ // check if the given id and multiDiff adrress are valid
-                connexionToGestionnaire =  new Socket(ip, portGestionnaire);
-                br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
-                pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
-                int portMultiDiff = portLeft(9998);
-                String id, multicastIP;
-                if(args.length == 4){
-                    id = fill_hashtag_or_zero(args[1], 8, "#");
-                    multicastIP = args[2];
-                }
-                else{
-                    id = fill_hashtag_or_zero(askID(), 8, "#");
-                    multicastIP = addressChecker(portMultiDiff);
-                }
-                InetAddress address = InetAddress.getLocalHost();
-                diffuser = new Diffuser(id, InetAddress.getByName(multicastIP), portMultiDiff,  address, reception.getLocalPort());
-                if(diffuser.getRegistered(br, pw))
-                    break;
+
+            // check if the given id and multiDiff adrress are valid
+            connexionToGestionnaire =  new Socket(ip, portGestionnaire);
+            br = new BufferedReader(new InputStreamReader(connexionToGestionnaire.getInputStream()));
+            pw = new PrintWriter(new OutputStreamWriter(connexionToGestionnaire.getOutputStream()));
+            int portMultiDiff = portLeft(9998);
+            String id, multicastIP;
+            if(args.length == 4){
+                id = fill_hashtag_or_zero(args[1], 8, "#");
+                multicastIP = args[2];
+            }
+            else{
+                id = fill_hashtag_or_zero(askID(), 8, "#");
+                multicastIP = addressChecker(portMultiDiff);
+            }
+            InetAddress address = InetAddress.getLocalHost();
+            diffuser = new Diffuser(id, InetAddress.getByName(multicastIP), portMultiDiff,  address, reception.getLocalPort());
+            if(!diffuser.getRegistered(br, pw)){
+                System.out.println("REGI failed : RENO received");
+                return;
             }
             
             // start the multidiffusion
